@@ -12,7 +12,7 @@ body {
   overscroll-behavior: none;
   overflow: hidden;
   user-select: none;
-  background-color: black;
+  background-color: #000000;
 }
 
 img {
