@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import AnimatedScene from "./components/AnimatedScene";
 import DebugCard from "./components/DebugCard";
-import GameWrapper from "./components/GameWrapper";
+import Scene from "./components/Scene";
 import useAnimationFrame from "./hooks/useAnimationFrame";
 import useWebSocket from "./hooks/useWebSocket";
 import { clientEmit } from "./network/client";
@@ -28,11 +27,11 @@ function Game() {
   };
 
   return (
-    <AnimatedScene update={update}>
-      <GameWrapper>
+    <div style={{ position: "relative" }}>
+      <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
         <DebugCard position={{ x: 8, y: 8 }} />
-      </GameWrapper>
-    </AnimatedScene>
+      </Scene>
+    </div>
   );
 }
 

@@ -12,7 +12,7 @@ type DebugCardProps = {
 
 function DebugCard({ position }: DebugCardProps) {
   const { fps, deltaTime } = useGameStore(useShallow((state) => state));
-  const { ping } = useConnectionStore(useShallow((state) => state));
+  const { socket, ping } = useConnectionStore(useShallow((state) => state));
 
   return (
     <div
@@ -25,11 +25,52 @@ function DebugCard({ position }: DebugCardProps) {
         zIndex: ZIndex.debugCard,
       }}
     >
-      <Text fontSize={"1.5rem"}>fps: {fps}</Text>
+      <div
+        style={{
+          marginBottom: "8px",
+          fontWeight: "bold",
+        }}
+      >
+        <Text fontSize={"1.5rem"}>Bun Crawler Debug</Text>
+      </div>
+      <Text fontSize={"1.5rem"}>
+        fps:{" "}
+        <Text
+          fontSize={"1.5rem"}
+          color={fps >= 30 && fps < 60 ? "orange" : fps >= 60 ? "green" : "red"}
+        >
+          {fps}
+        </Text>
+      </Text>
       <Text fontSize={"1.5rem"}>
         deltaTime: {fixDecimalPlaces(deltaTime, 2)}ms
       </Text>
-      <Text fontSize={"1.5rem"}>ping: {ping}ms</Text>
+      <Text fontSize={"1.5rem"}>
+        connected:{" "}
+        <Text fontSize={"1.5rem"} color={socket.connected ? "green" : "red"}>
+          {socket.connected ? "true" : "false"}
+        </Text>
+      </Text>
+      {socket.connected && (
+        <>
+          <Text fontSize={"1.5rem"}>
+            ping:{" "}
+            <Text
+              fontSize={"1.5rem"}
+              color={
+                ping > 150
+                  ? "red"
+                  : ping >= 50 && ping <= 150
+                    ? "orange"
+                    : "green"
+              }
+            >
+              {ping}
+            </Text>
+          </Text>
+          <Text fontSize={"1.5rem"}>socket id: {socket.id}</Text>
+        </>
+      )}
     </div>
   );
 }

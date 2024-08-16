@@ -4,6 +4,6 @@ export type Vector2 = {
 };
 
 export type Size = {
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
 };
