@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useGameStore from "../stores/useGameStore";
 import useSettingsStore from "../stores/useSettingsStore";
 
 const useAnimationFrame = () => {
   const [_, setTick] = useState<number>(0);
 
-  const { maxFps } = useSettingsStore((state) => state);
-  const { setFps, setDeltaTime } = useGameStore((state) => state);
+  const { maxFps } = useSettingsStore(useShallow((state) => state));
+  const { setFps, setDeltaTime } = useGameStore(useShallow((state) => state));
 
   const frameDetails = useRef({
     fps: 0,
