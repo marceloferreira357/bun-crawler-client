@@ -4,6 +4,7 @@ import DebugCard from "./components/DebugCard";
 import Entity from "./components/Entity";
 import Scene from "./components/Scene";
 import useAnimationFrame from "./hooks/useAnimationFrame";
+import useKeyPress from "./hooks/useKeyPress";
 import useWebSocket from "./hooks/useWebSocket";
 import { clientEmit } from "./network/client";
 import useConnectionStore from "./stores/useConnectionStore";
@@ -15,11 +16,32 @@ function Game() {
 
   useAnimationFrame();
   useWebSocket();
+  const pressedKeys = useKeyPress();
 
   const pingAccumulator = useRef(0);
   const pingInterval = useRef(1000);
 
+  const entityPosition = useRef({
+    x: 150,
+    y: 150,
+  });
+
   const update = () => {
+    // moving the entity
+    if (pressedKeys.includes("a")) {
+      entityPosition.current.x -= 0.2 * deltaTime;
+    }
+    if (pressedKeys.includes("d")) {
+      entityPosition.current.x += 0.2 * deltaTime;
+    }
+    if (pressedKeys.includes("w")) {
+      entityPosition.current.y -= 0.2 * deltaTime;
+    }
+    if (pressedKeys.includes("s")) {
+      entityPosition.current.y += 0.2 * deltaTime;
+    }
+
+    // calculating ping
     pingAccumulator.current += deltaTime;
     if (pingAccumulator.current >= pingInterval.current) {
       clientEmit(socket, "ping", [Date.now()]);
@@ -31,18 +53,14 @@ function Game() {
     <div style={{ position: "relative" }}>
       <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
         <DebugCard position={{ x: 8, y: 8 }} />
-        {/* entities debug */}
+        {/* rendering entities */}
         <Entity
           visible
           size={{
             width: 64,
             height: 64,
           }}
-          zIndex={1}
-          position={{
-            x: 150,
-            y: 150,
-          }}
+          position={entityPosition.current}
         >
           <div
             style={{
@@ -59,7 +77,6 @@ function Game() {
             width: 64,
             height: 64,
           }}
-          zIndex={1}
           position={{
             x: 300,
             y: 300,

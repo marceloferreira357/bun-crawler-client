@@ -5,7 +5,7 @@ type EntityProps = {
   visible: boolean;
   position?: Vector2;
   size: Size;
-  zIndex: number;
+  zIndex?: number;
   children: React.ReactNode;
 };
 
@@ -17,8 +17,8 @@ const Entity = forwardRef<HTMLDivElement, EntityProps>(
         style={{
           position: position ? "absolute" : "static",
           display: visible ? "block" : "none",
-          top: position?.x,
-          left: position?.y,
+          top: position?.y,
+          left: position?.x,
           width: size.width,
           height: size.height,
           zIndex,
