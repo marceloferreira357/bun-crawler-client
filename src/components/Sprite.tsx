@@ -21,7 +21,6 @@ const Sprite = forwardRef<HTMLDivElement, SpriteProps>(
           style={{
             width: size?.width,
             height: size?.height,
-            scale,
           }}
         />
       </GameObject>

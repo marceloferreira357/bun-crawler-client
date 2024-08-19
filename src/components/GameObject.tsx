@@ -18,7 +18,8 @@ const GameObject = forwardRef<HTMLDivElement, GameObjectProps>(
           left: position?.x,
           width: size?.width,
           height: size?.height,
-          scale,
+          transform: scale ? `scale(${scale})` : undefined,
+          transformOrigin: "top left",
           zIndex,
         }}
       >

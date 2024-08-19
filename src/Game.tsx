@@ -3,6 +3,7 @@ import { useShallow } from "zustand/react/shallow";
 import DebugCard from "./components/DebugCard";
 import GameObject from "./components/GameObject";
 import Scene from "./components/Scene";
+import SpriteSheet from "./components/SpriteSheet";
 import useAnimationFrame from "./hooks/useAnimationFrame";
 import useKeyPress from "./hooks/useKeyPress";
 import useWebSocket from "./hooks/useWebSocket";
@@ -71,26 +72,34 @@ function Game() {
             }}
           />
         </GameObject>
-        <GameObject
-          visible
-          size={{
-            width: 64,
-            height: 64,
-          }}
+        {/* SpriteSheet example */}
+        <SpriteSheet
+          src={
+            new URL(
+              "/sprites/0x72_DungeonTilesetII_v1.7/0x72_DungeonTilesetII_v1.7.png",
+              import.meta.env.VITE_PUBLIC_ADDRESS
+            )
+          }
           position={{
             x: 300,
             y: 300,
           }}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "yellow",
-              borderRadius: 12,
-            }}
-          />
-        </GameObject>
+          scale={3}
+          size={{
+            width: 512,
+            height: 512,
+          }}
+          tile={{
+            position: {
+              x: -16,
+              y: -16,
+            },
+            size: {
+              width: 16,
+              height: 16,
+            },
+          }}
+        />
       </Scene>
     </div>
   );
