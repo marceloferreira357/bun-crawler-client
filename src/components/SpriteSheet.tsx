@@ -12,22 +12,15 @@ type SpriteSheetProps = {
 const SpriteSheet = forwardRef<HTMLDivElement, SpriteSheetProps>(
   ({ position, size, zIndex, src, scale, tile }, ref) => {
     return (
-      <div
-        style={{
-          position: "absolute",
-          top: position?.y,
-          left: position?.x,
-          width: tile.size?.width,
-          height: tile.size?.height,
-          overflow: "hidden",
-          transform: scale ? `scale(${scale})` : undefined,
-          transformOrigin: "top left",
-        }}
+      <GameObject
+        ref={ref}
+        position={position}
+        size={tile.size}
+        scale={scale}
+        zIndex={zIndex}
       >
-        <GameObject ref={ref} size={tile.size} zIndex={zIndex}>
-          <Sprite position={tile.position} size={size} src={src} />
-        </GameObject>
-      </div>
+        <Sprite position={tile.position} size={size} src={src} />
+      </GameObject>
     );
   }
 );

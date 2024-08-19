@@ -92,7 +92,7 @@ function Game() {
           tile={{
             position: {
               x: -16,
-              y: -16,
+              y: -32,
             },
             size: {
               width: 16,
