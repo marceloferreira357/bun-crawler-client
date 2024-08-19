@@ -18,6 +18,13 @@ export const handleOnDisconnectEvent = (socket: Socket) => {
   });
 };
 
+export const handleOnServerFullEvent = (socket: Socket) => {
+  socket.on("server_full", () => {
+    socket.disconnect();
+    console.log("Disconnected, server is full");
+  });
+};
+
 export const handleOnPongEvent = (
   socket: Socket,
   setPing: (ping: number) => void

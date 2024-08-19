@@ -6,6 +6,7 @@ import {
   handleOnConnectEvent,
   handleOnDisconnectEvent,
   handleOnPongEvent,
+  handleOnServerFullEvent,
 } from "../network/events";
 import useConnectionStore from "../stores/useConnectionStore";
 
@@ -19,6 +20,7 @@ const useWebSocket = () => {
     handleOnConnectEvent(socket);
     handleOnConnectErrorEvent(socket);
     handleOnDisconnectEvent(socket);
+    handleOnServerFullEvent(socket);
     handleOnPongEvent(socket, setPing);
 
     return () => {
