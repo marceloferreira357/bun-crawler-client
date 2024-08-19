@@ -1,27 +1,27 @@
-import { Vector2 } from "../common/types";
+import React, { forwardRef } from "react";
+import { Entity } from "../common/types";
+import GameObject from "./GameObject";
 
 type TextProps = {
-  position?: Vector2;
   children: React.ReactNode;
-  fontSize: string | number;
-  color?: string;
-};
+} & Pick<Entity, "position"> &
+  Pick<React.CSSProperties, "color" | "fontSize">;
 
-function Text({ position, children, fontSize, color = "#ffffff" }: TextProps) {
-  return (
-    <span
-      style={{
-        display: "inline",
-        position: position ? "absolute" : "static",
-        top: position?.y,
-        left: position?.x,
-        color,
-        fontSize,
-      }}
-    >
-      {children}
-    </span>
-  );
-}
+const Text = forwardRef<HTMLDivElement, TextProps>(
+  ({ position, children, fontSize, color = "#ffffff" }, ref) => {
+    return (
+      <GameObject ref={ref} position={position}>
+        <span
+          style={{
+            color,
+            fontSize,
+          }}
+        >
+          {children}
+        </span>
+      </GameObject>
+    );
+  }
+);
 
 export default Text;
