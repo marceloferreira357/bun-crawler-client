@@ -4,7 +4,7 @@ import useGameStore from "../stores/useGameStore";
 import useSettingsStore from "../stores/useSettingsStore";
 
 const useAnimationFrame = () => {
-  const [_, setTick] = useState<number>(0);
+  const [, setTick] = useState<number>(0);
 
   const { maxFps } = useSettingsStore(useShallow((state) => state));
   const { setFps, setDeltaTime } = useGameStore(useShallow((state) => state));
@@ -15,6 +15,7 @@ const useAnimationFrame = () => {
     previousTime: performance.now(),
     lastFpsUpdate: performance.now(),
     frameId: 0,
+    accumulatedTime: 0,
   });
 
   const frameInterval = 1000 / maxFps;
@@ -28,35 +29,39 @@ const useAnimationFrame = () => {
     [setTick, setDeltaTime, setFps]
   );
 
-  const animate = useCallback(
-    (time: number) => {
-      const { previousTime, lastFpsUpdate } = frameDetails.current;
-      const deltaTime = time - previousTime;
+  const animate = (time: number) => {
+    const { previousTime, lastFpsUpdate } = frameDetails.current;
+    let deltaTime = time - previousTime;
 
-      if (deltaTime >= frameInterval) {
-        frameDetails.current.frameCount += 1;
-        update(deltaTime);
+    const maxDeltaTime = 100;
+    if (deltaTime > maxDeltaTime) {
+      deltaTime = maxDeltaTime;
+    }
 
-        if (time - lastFpsUpdate >= 1000) {
-          frameDetails.current.fps = frameDetails.current.frameCount;
-          frameDetails.current.frameCount = 0;
-          frameDetails.current.lastFpsUpdate = time;
-        }
+    frameDetails.current.accumulatedTime += deltaTime;
 
-        frameDetails.current.previousTime = time - (deltaTime % frameInterval);
+    while (frameDetails.current.accumulatedTime >= frameInterval) {
+      update(frameInterval);
+      frameDetails.current.accumulatedTime -= frameInterval;
+      frameDetails.current.frameCount += 1;
+
+      if (time - lastFpsUpdate >= 1000) {
+        frameDetails.current.fps = frameDetails.current.frameCount;
+        frameDetails.current.frameCount = 0;
+        frameDetails.current.lastFpsUpdate = time;
       }
+    }
 
-      frameDetails.current.frameId = requestAnimationFrame(animate);
-    },
-    [frameInterval, update]
-  );
+    frameDetails.current.previousTime = time;
+    frameDetails.current.frameId = requestAnimationFrame(animate);
+  };
 
   useEffect(() => {
     frameDetails.current.previousTime = performance.now();
     frameDetails.current.frameId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(frameDetails.current.frameId);
-  }, [animate]);
+  }, [maxFps, update]);
 };
 
 export default useAnimationFrame;

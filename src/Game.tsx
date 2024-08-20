@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { interpolatePosition } from "./common/utils";
 import DebugCard from "./components/DebugCard";
 import GameObject from "./components/GameObject";
 import Scene from "./components/Scene";
@@ -28,19 +29,38 @@ function Game() {
   });
 
   const update = () => {
-    // moving the entity
+    const velocity = 0.5 * deltaTime;
+
+    const targetPosition = {
+      ...entityPosition.current,
+    };
+
+    // Update target position based on key presses
     if (pressedKeys.includes("a")) {
-      entityPosition.current.x -= 0.1 * deltaTime;
+      targetPosition.x -= velocity;
     }
     if (pressedKeys.includes("d")) {
-      entityPosition.current.x += 0.1 * deltaTime;
+      targetPosition.x += velocity;
     }
     if (pressedKeys.includes("w")) {
-      entityPosition.current.y -= 0.1 * deltaTime;
+      targetPosition.y -= velocity;
     }
     if (pressedKeys.includes("s")) {
-      entityPosition.current.y += 0.1 * deltaTime;
+      targetPosition.y += velocity;
     }
+
+    // interpolate current position towards the target position
+    const alpha = 0.9;
+    entityPosition.current.x = interpolatePosition(
+      entityPosition.current.x,
+      targetPosition.x,
+      alpha
+    );
+    entityPosition.current.y = interpolatePosition(
+      entityPosition.current.y,
+      targetPosition.y,
+      alpha
+    );
 
     // calculating ping
     pingAccumulator.current += deltaTime;
