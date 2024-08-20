@@ -21,7 +21,7 @@ const useAnimationFrame = () => {
 
   const update = useCallback(
     (deltaTime: number) => {
-      setTick(frameDetails.current.frameCount);
+      setTick((tick) => tick + 1);
       setDeltaTime(deltaTime);
       setFps(frameDetails.current.fps);
     },
@@ -31,18 +31,11 @@ const useAnimationFrame = () => {
   const animate = useCallback(
     (time: number) => {
       const { previousTime, lastFpsUpdate } = frameDetails.current;
-      let deltaTime = time - previousTime;
+      const deltaTime = time - previousTime;
 
-      if (deltaTime > frameInterval * 2) {
-        deltaTime = frameInterval;
-      }
-
-      const excessTime = deltaTime % frameInterval;
-      const adjustedDeltaTime = deltaTime - excessTime;
-
-      if (adjustedDeltaTime >= frameInterval) {
+      if (deltaTime >= frameInterval) {
         frameDetails.current.frameCount += 1;
-        update(adjustedDeltaTime);
+        update(deltaTime);
 
         if (time - lastFpsUpdate >= 1000) {
           frameDetails.current.fps = frameDetails.current.frameCount;
@@ -50,7 +43,7 @@ const useAnimationFrame = () => {
           frameDetails.current.lastFpsUpdate = time;
         }
 
-        frameDetails.current.previousTime = time - excessTime;
+        frameDetails.current.previousTime = time - (deltaTime % frameInterval);
       }
 
       frameDetails.current.frameId = requestAnimationFrame(animate);

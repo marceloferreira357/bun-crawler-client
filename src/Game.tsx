@@ -30,16 +30,16 @@ function Game() {
   const update = () => {
     // moving the entity
     if (pressedKeys.includes("a")) {
-      entityPosition.current.x -= 0.2 * deltaTime;
+      entityPosition.current.x -= 0.1 * deltaTime;
     }
     if (pressedKeys.includes("d")) {
-      entityPosition.current.x += 0.2 * deltaTime;
+      entityPosition.current.x += 0.1 * deltaTime;
     }
     if (pressedKeys.includes("w")) {
-      entityPosition.current.y -= 0.2 * deltaTime;
+      entityPosition.current.y -= 0.1 * deltaTime;
     }
     if (pressedKeys.includes("s")) {
-      entityPosition.current.y += 0.2 * deltaTime;
+      entityPosition.current.y += 0.1 * deltaTime;
     }
 
     // calculating ping
