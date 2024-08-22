@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { interpolatePosition } from "./common/utils";
+import ControllerHud from "./components/ControllerHud/ControllerHud";
 import DebugCard from "./components/DebugCard";
 import GameObject from "./components/GameObject";
 import Scene from "./components/Scene";
@@ -21,7 +22,7 @@ function Game() {
   const pressedKeys = useKeyPress();
 
   const pingAccumulator = useRef(0);
-  const pingInterval = useRef(1000);
+  const pingInterval = useRef(5000);
 
   const entityPosition = useRef({
     x: 150,
@@ -73,7 +74,8 @@ function Game() {
   return (
     <div style={{ position: "relative" }}>
       <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
-        <DebugCard position={{ x: 8, y: 8 }} />
+        <DebugCard />
+        <ControllerHud />
         {/* rendering game objects */}
         <GameObject
           visible

@@ -1,16 +1,11 @@
 import { useShallow } from "zustand/react/shallow";
 import { ZIndex } from "../common/constants";
-import { Vector2 } from "../common/types";
 import { fixDecimalPlaces } from "../common/utils";
 import useConnectionStore from "../stores/useConnectionStore";
 import useGameStore from "../stores/useGameStore";
 import Text from "./Text";
 
-type DebugCardProps = {
-  position: Vector2;
-};
-
-function DebugCard({ position }: DebugCardProps) {
+function DebugCard() {
   const { fps, deltaTime } = useGameStore(useShallow((state) => state));
   const { socket, ping } = useConnectionStore(useShallow((state) => state));
 
@@ -18,8 +13,8 @@ function DebugCard({ position }: DebugCardProps) {
     <div
       style={{
         position: "absolute",
-        top: position.y,
-        left: position.x,
+        top: 8,
+        left: 8,
         display: "flex",
         flexDirection: "column",
         zIndex: ZIndex.debugCard,
