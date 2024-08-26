@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { Entity } from "../common/types";
 import GameObject from "./GameObject";
 
@@ -7,21 +7,19 @@ type TextProps = {
 } & Pick<Entity, "position"> &
   Pick<React.CSSProperties, "color" | "fontSize">;
 
-const Text = forwardRef<HTMLDivElement, TextProps>(
-  ({ position, children, fontSize, color = "#ffffff" }, ref) => {
-    return (
-      <GameObject ref={ref} position={position}>
-        <span
-          style={{
-            color,
-            fontSize,
-          }}
-        >
-          {children}
-        </span>
-      </GameObject>
-    );
-  }
-);
+function Text({ position, children, fontSize, color = "#ffffff" }: TextProps) {
+  return (
+    <GameObject position={position}>
+      <span
+        style={{
+          color,
+          fontSize,
+        }}
+      >
+        {children}
+      </span>
+    </GameObject>
+  );
+}
 
 export default Text;

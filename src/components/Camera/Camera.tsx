@@ -1,4 +1,3 @@
-import { useWindowSize } from "@uidotdev/usehooks";
 import React from "react";
 import { Vector2 } from "../../common/types";
 import { isChildVisible } from "./cameraUtils";
@@ -6,12 +5,14 @@ import { isChildVisible } from "./cameraUtils";
 type CameraProps = {
   children: React.ReactNode;
   position: Vector2;
+  size: {
+    width: number | null;
+    height: number | null;
+  };
   zoom?: number;
 };
 
-function Camera({ children, position, zoom = 1 }: CameraProps) {
-  const size = useWindowSize();
-
+function Camera({ children, position, size, zoom = 1 }: CameraProps) {
   const visibleChildren = React.Children.toArray(children).filter((child) => {
     return (
       React.isValidElement(child) &&

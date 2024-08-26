@@ -1,3 +1,4 @@
+import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { handleBoxCollision, interpolatePosition } from "./common/utils";
@@ -18,6 +19,8 @@ import useGameStore from "./stores/useGameStore";
 function Game() {
   const { socket } = useConnectionStore(useShallow((state) => state));
   const { deltaTime } = useGameStore(useShallow((state) => state));
+
+  const windowSize = useWindowSize();
 
   useAnimationFrame();
   useWebSocket();
@@ -110,7 +113,7 @@ function Game() {
         backgroundColor="blue"
       >
         {/* rendering the camera */}
-        <Camera position={{ x: 0, y: 0 }} zoom={1}>
+        <Camera position={{ x: 0, y: 0 }} size={windowSize} zoom={1}>
           {/* rendering game objects */}
           <GameObject
             size={{
