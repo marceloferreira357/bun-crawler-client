@@ -13,6 +13,7 @@ body {
   overflow: hidden;
   user-select: none;
   background-color: #000000;
+  cursor: none;
 }
 
 img {

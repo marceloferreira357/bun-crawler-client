@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { handleBoxCollision, interpolatePosition } from "./common/utils";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
+import Cursor from "./components/Cursor/Cursor";
 import DebugCard from "./components/DebugCard";
 import GameObject from "./components/GameObject";
 import Scene from "./components/Scene";
@@ -98,8 +99,9 @@ function Game() {
 
   return (
     <div style={{ position: "relative" }}>
+      <Cursor />
+      <DebugCard />
       <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
-        <DebugCard />
         <ControllerHud />
         {/* rendering game objects */}
         <GameObject

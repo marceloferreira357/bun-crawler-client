@@ -1,11 +1,13 @@
 import { useShallow } from "zustand/react/shallow";
 import { ZIndex } from "../common/constants";
 import { fixDecimalPlaces } from "../common/utils";
+import useCursorPosition from "../hooks/useCursorPosition";
 import useConnectionStore from "../stores/useConnectionStore";
 import useGameStore from "../stores/useGameStore";
 import Text from "./Text";
 
 function DebugCard() {
+  const { x = 0, y = 0 } = useCursorPosition();
   const { fps, deltaTime } = useGameStore(useShallow((state) => state));
   const { socket, ping } = useConnectionStore(useShallow((state) => state));
 
@@ -66,6 +68,9 @@ function DebugCard() {
           <Text fontSize={"1.5rem"}>socket id: {socket.id}</Text>
         </>
       )}
+      <Text fontSize={"1.5rem"}>
+        cursor position: ({x}, {y})
+      </Text>
     </div>
   );
 }

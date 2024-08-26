@@ -20,3 +20,11 @@ export type Rectangle = Shape;
 export type Circle = {
   radius: number;
 } & Shape;
+
+export type CursorVariant =
+  | "triangle1"
+  | "triangle2"
+  | "triangle3"
+  | "hand"
+  | "pointing"
+  | "holding";
