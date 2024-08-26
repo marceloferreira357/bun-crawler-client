@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { interpolatePosition } from "./common/utils";
+import { handleBoxCollision, interpolatePosition } from "./common/utils";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import DebugCard from "./components/DebugCard";
 import GameObject from "./components/GameObject";
@@ -29,6 +29,8 @@ function Game() {
     y: 150,
   });
 
+  const isPlayerColliding = useRef(false);
+
   const update = () => {
     const velocity = 0.5 * deltaTime;
 
@@ -50,18 +52,41 @@ function Game() {
       targetPosition.y += velocity;
     }
 
-    // interpolate current position towards the target position
-    const alpha = 0.9;
-    entityPosition.current.x = interpolatePosition(
-      entityPosition.current.x,
-      targetPosition.x,
-      alpha
-    );
-    entityPosition.current.y = interpolatePosition(
-      entityPosition.current.y,
-      targetPosition.y,
-      alpha
-    );
+    // check for collisions
+    if (
+      handleBoxCollision(
+        {
+          x: targetPosition.x,
+          y: targetPosition.y,
+          width: 64,
+          height: 64,
+        },
+        {
+          x: 300,
+          y: 300,
+          width: 16 * 3,
+          height: 16 * 3,
+        }
+      )
+    ) {
+      isPlayerColliding.current = true;
+    } else {
+      // update the player's position only if there is no collision
+      isPlayerColliding.current = false;
+
+      // interpolate current position towards the target position
+      const alpha = 0.9;
+      entityPosition.current.x = interpolatePosition(
+        entityPosition.current.x,
+        targetPosition.x,
+        alpha
+      );
+      entityPosition.current.y = interpolatePosition(
+        entityPosition.current.y,
+        targetPosition.y,
+        alpha
+      );
+    }
 
     // calculating ping
     pingAccumulator.current += deltaTime;
