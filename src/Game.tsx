@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { handleBoxCollision, interpolatePosition } from "./common/utils";
+import Camera from "./components/Camera/Camera";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
 import DebugCard from "./components/DebugCard";
@@ -101,54 +102,61 @@ function Game() {
     <div style={{ position: "relative" }}>
       <Cursor />
       <DebugCard />
-      <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
-        <ControllerHud />
-        {/* rendering game objects */}
-        <GameObject
-          visible
-          size={{
-            width: 64,
-            height: 64,
-          }}
-          position={entityPosition.current}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "red",
-              borderRadius: 12,
+      <ControllerHud />
+      {/* scenes */}
+      <Scene
+        size={{ width: "100dvw", height: "100dvh" }}
+        update={update}
+        backgroundColor="blue"
+      >
+        {/* rendering the camera */}
+        <Camera position={{ x: 0, y: 0 }} zoom={1}>
+          {/* rendering game objects */}
+          <GameObject
+            size={{
+              width: 64,
+              height: 64,
+            }}
+            position={entityPosition.current}
+          >
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "red",
+                borderRadius: 12,
+              }}
+            />
+          </GameObject>
+          {/* SpriteSheet example */}
+          <SpriteSheet
+            src={
+              new URL(
+                "/sprites/0x72_DungeonTilesetII_v1.7/0x72_DungeonTilesetII_v1.7.png",
+                import.meta.env.VITE_PUBLIC_ADDRESS
+              )
+            }
+            position={{
+              x: 300,
+              y: 300,
+            }}
+            scale={3}
+            size={{
+              width: 512,
+              height: 512,
+            }}
+            tile={{
+              position: {
+                x: -16,
+                y: -32,
+              },
+              size: {
+                width: 16,
+                height: 16,
+              },
             }}
           />
-        </GameObject>
-        {/* SpriteSheet example */}
-        <SpriteSheet
-          src={
-            new URL(
-              "/sprites/0x72_DungeonTilesetII_v1.7/0x72_DungeonTilesetII_v1.7.png",
-              import.meta.env.VITE_PUBLIC_ADDRESS
-            )
-          }
-          position={{
-            x: 300,
-            y: 300,
-          }}
-          scale={3}
-          size={{
-            width: 512,
-            height: 512,
-          }}
-          tile={{
-            position: {
-              x: -16,
-              y: -32,
-            },
-            size: {
-              width: 16,
-              height: 16,
-            },
-          }}
-        />
+        </Camera>
       </Scene>
     </div>
   );
