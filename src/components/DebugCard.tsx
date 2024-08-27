@@ -1,5 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
-import { ZIndex } from "../common/constants";
+import { zIndex } from "../common/constants";
 import { fixDecimalPlaces } from "../common/utils";
 import useCursorPosition from "../hooks/useCursorPosition";
 import useConnectionStore from "../stores/useConnectionStore";
@@ -19,7 +19,7 @@ function DebugCard() {
         left: 8,
         display: "flex",
         flexDirection: "column",
-        zIndex: ZIndex.debugCard,
+        zIndex: zIndex.debugCard,
       }}
     >
       <div

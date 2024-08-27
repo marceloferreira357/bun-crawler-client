@@ -1,4 +1,4 @@
-import { ZIndex } from "../../common/constants";
+import { zIndex } from "../../common/constants";
 import useKeyPress from "../../hooks/useKeyPress";
 import AKeySpriteSheet from "./AKeySpriteSheet";
 import DKeySpriteSheet from "./DKeySpriteSheet";
@@ -19,7 +19,7 @@ function ControllerHud() {
         left: 12,
         width: 152,
         height: 100,
-        zIndex: ZIndex.controllerHud,
+        zIndex: zIndex.controllerHud,
       }}
     >
       <div

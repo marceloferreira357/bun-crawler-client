@@ -1,5 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
-import { ZIndex } from "../../common/constants";
+import { zIndex } from "../../common/constants";
 import useCursorPosition from "../../hooks/useCursorPosition";
 import useGameStore from "../../stores/useGameStore";
 import SpriteSheet from "../SpriteSheet";
@@ -38,7 +38,7 @@ function Cursor() {
           height: tile.height,
         },
       }}
-      zIndex={ZIndex.cursor}
+      zIndex={zIndex.cursor}
     />
   );
 }

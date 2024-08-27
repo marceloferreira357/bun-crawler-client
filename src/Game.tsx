@@ -107,11 +107,7 @@ function Game() {
       <DebugCard />
       <ControllerHud />
       {/* scenes */}
-      <Scene
-        size={{ width: "100dvw", height: "100dvh" }}
-        update={update}
-        backgroundColor="blue"
-      >
+      <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
         {/* rendering the camera */}
         <Camera position={{ x: 0, y: 0 }} size={windowSize} zoom={1}>
           {/* rendering game objects */}
