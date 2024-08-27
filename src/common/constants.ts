@@ -25,4 +25,14 @@ export const credits = [
     author: "0x72",
     href: "https://0x72.itch.io/dungeontileset-ii",
   },
+  {
+    title: "RPG Essentials SFX - Free!",
+    author: "Leohpaz",
+    href: "https://leohpaz.itch.io/rpg-essentials-sfx-free",
+  },
+  {
+    title: "Minifantasy - Dungeon Audio Pack",
+    author: "Leohpaz",
+    href: "https://leohpaz.itch.io/minifantasy-dungeon-sfx-pack",
+  },
 ];

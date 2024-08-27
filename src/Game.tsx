@@ -10,6 +10,7 @@ import GameObject from "./components/GameObject";
 import Scene from "./components/Scene";
 import SpriteSheet from "./components/SpriteSheet";
 import useAnimationFrame from "./hooks/useAnimationFrame";
+import useAudio from "./hooks/useAudio";
 import useKeyPress from "./hooks/useKeyPress";
 import useWebSocket from "./hooks/useWebSocket";
 import { clientEmit } from "./network/client";
@@ -35,6 +36,13 @@ function Game() {
   });
 
   const isPlayerColliding = useRef(false);
+  const collisionAudio = useAudio({
+    src: new URL(
+      "/sfx/RPG_Essentials_Free/12_Player_Movement_SFX/08_Step_rock_02.wav",
+      import.meta.env.VITE_PUBLIC_ADDRESS
+    ),
+    volume: 0.5,
+  });
 
   const update = () => {
     const velocity = 0.5 * deltaTime;
@@ -74,6 +82,10 @@ function Game() {
         }
       )
     ) {
+      // play audio
+      if (!isPlayerColliding.current && !collisionAudio.playing()) {
+        collisionAudio.play();
+      }
       isPlayerColliding.current = true;
     } else {
       // update the player's position only if there is no collision
