@@ -1,3 +1,5 @@
+import { PlayerDefaultAttributes } from "./types";
+
 export const zIndex = {
   cursor: 10,
   debugCard: 9,
@@ -21,7 +23,7 @@ export const credits = [
     href: "https://cupnooble.itch.io/sprout-lands-ui-pack",
   },
   {
-    title: "dungeontileset-ii",
+    title: "16x16 DungeonTileset II",
     author: "0x72",
     href: "https://0x72.itch.io/dungeontileset-ii",
   },
@@ -36,3 +38,20 @@ export const credits = [
     href: "https://leohpaz.itch.io/minifantasy-dungeon-sfx-pack",
   },
 ];
+
+export const playerDefaultAttributes: PlayerDefaultAttributes = {
+  forest_adventurer: {
+    female: {
+      size: {
+        width: 15,
+        height: 18,
+      },
+    },
+    male: {
+      size: {
+        width: 15,
+        height: 19,
+      },
+    },
+  },
+};

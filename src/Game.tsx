@@ -1,12 +1,14 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { playerDefaultAttributes } from "./common/constants";
+import { Direction, PlayerGender } from "./common/types";
 import { handleBoxCollision, interpolatePosition } from "./common/utils";
 import Camera from "./components/Camera/Camera";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
 import DebugCard from "./components/DebugCard";
-import GameObject from "./components/GameObject";
+import Player from "./components/Player/Player";
 import Scene from "./components/Scene";
 import SpriteSheet from "./components/SpriteSheet";
 import useAnimationFrame from "./hooks/useAnimationFrame";
@@ -34,6 +36,8 @@ function Game() {
     x: 150,
     y: 150,
   });
+  const entityDirection = useRef<Direction>("right");
+  const playerGender = useRef<PlayerGender>("male");
 
   const isPlayerColliding = useRef(false);
   const collisionAudio = useAudio({
@@ -45,7 +49,7 @@ function Game() {
   });
 
   const update = () => {
-    const velocity = 0.5 * deltaTime;
+    const velocity = 0.2 * deltaTime;
 
     const targetPosition = {
       ...entityPosition.current,
@@ -53,15 +57,19 @@ function Game() {
 
     // Update target position based on key presses
     if (pressedKeys.includes("a")) {
+      entityDirection.current = "left";
       targetPosition.x -= velocity;
     }
     if (pressedKeys.includes("d")) {
+      entityDirection.current = "right";
       targetPosition.x += velocity;
     }
     if (pressedKeys.includes("w")) {
+      entityDirection.current = "up";
       targetPosition.y -= velocity;
     }
     if (pressedKeys.includes("s")) {
+      entityDirection.current = "down";
       targetPosition.y += velocity;
     }
 
@@ -71,8 +79,12 @@ function Game() {
         {
           x: targetPosition.x,
           y: targetPosition.y,
-          width: 64,
-          height: 64,
+          width:
+            playerDefaultAttributes["forest_adventurer"][playerGender.current]
+              .size.width * 3,
+          height:
+            playerDefaultAttributes["forest_adventurer"][playerGender.current]
+              .size.height * 3,
         },
         {
           x: 300,
@@ -83,7 +95,7 @@ function Game() {
       )
     ) {
       // play audio
-      if (!isPlayerColliding.current && !collisionAudio.playing()) {
+      if (!isPlayerColliding.current) {
         collisionAudio.play();
       }
       isPlayerColliding.current = true;
@@ -123,22 +135,23 @@ function Game() {
         {/* rendering the camera */}
         <Camera position={{ x: 0, y: 0 }} size={windowSize} zoom={1}>
           {/* rendering game objects */}
-          <GameObject
-            size={{
-              width: 64,
-              height: 64,
-            }}
+          <Player
             position={entityPosition.current}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "red",
-                borderRadius: 12,
-              }}
-            />
-          </GameObject>
+            gender={playerGender.current}
+            direction={entityDirection.current}
+            scale={3}
+            size={{
+              width:
+                playerDefaultAttributes["forest_adventurer"][
+                  playerGender.current
+                ].size.width,
+              height:
+                playerDefaultAttributes["forest_adventurer"][
+                  playerGender.current
+                ].size.height,
+            }}
+            variant="forest_adventurer"
+          />
           {/* SpriteSheet example */}
           <SpriteSheet
             src={
