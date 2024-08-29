@@ -42,7 +42,12 @@ export type BaseCharacter = Omit<Entity, "size" | "scale"> & {
   tiles: Tile[];
 };
 
-export type PlayerVariant = "forest_adventurer";
+export type PlayerVariant =
+  | "forest_adventurer"
+  | "inferno_knight"
+  | "arcane_sage"
+  | "orc_marauder"
+  | "ember_champion";
 
 export type PlayerGender = "male" | "female";
 

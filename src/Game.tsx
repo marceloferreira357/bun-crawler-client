@@ -2,7 +2,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { playerDefaultAttributes } from "./common/constants";
-import { Direction, PlayerGender } from "./common/types";
+import { Direction, PlayerGender, PlayerVariant } from "./common/types";
 import { handleBoxCollision, interpolatePosition } from "./common/utils";
 import Camera from "./components/Camera/Camera";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
@@ -38,6 +38,7 @@ function Game() {
   });
   const entityDirection = useRef<Direction>("right");
   const playerGender = useRef<PlayerGender>("male");
+  const playerVariant = useRef<PlayerVariant>("ember_champion");
 
   const isPlayerColliding = useRef(false);
   const collisionAudio = useAudio({
@@ -56,21 +57,21 @@ function Game() {
     };
 
     // Update target position based on key presses
-    if (pressedKeys.includes("a")) {
-      entityDirection.current = "left";
-      targetPosition.x -= velocity;
-    }
-    if (pressedKeys.includes("d")) {
-      entityDirection.current = "right";
-      targetPosition.x += velocity;
-    }
-    if (pressedKeys.includes("w")) {
+    if (pressedKeys.includes("w") || pressedKeys.includes("W")) {
       entityDirection.current = "up";
       targetPosition.y -= velocity;
     }
-    if (pressedKeys.includes("s")) {
+    if (pressedKeys.includes("s") || pressedKeys.includes("S")) {
       entityDirection.current = "down";
       targetPosition.y += velocity;
+    }
+    if (pressedKeys.includes("a") || pressedKeys.includes("A")) {
+      entityDirection.current = "left";
+      targetPosition.x -= velocity;
+    }
+    if (pressedKeys.includes("d") || pressedKeys.includes("D")) {
+      entityDirection.current = "right";
+      targetPosition.x += velocity;
     }
 
     // check for collisions
@@ -80,10 +81,10 @@ function Game() {
           x: targetPosition.x,
           y: targetPosition.y,
           width:
-            playerDefaultAttributes["forest_adventurer"][playerGender.current]
+            playerDefaultAttributes[playerVariant.current][playerGender.current]
               .size.width * 3,
           height:
-            playerDefaultAttributes["forest_adventurer"][playerGender.current]
+            playerDefaultAttributes[playerVariant.current][playerGender.current]
               .size.height * 3,
         },
         {
@@ -142,15 +143,15 @@ function Game() {
             scale={3}
             size={{
               width:
-                playerDefaultAttributes["forest_adventurer"][
+                playerDefaultAttributes[playerVariant.current][
                   playerGender.current
                 ].size.width,
               height:
-                playerDefaultAttributes["forest_adventurer"][
+                playerDefaultAttributes[playerVariant.current][
                   playerGender.current
                 ].size.height,
             }}
-            variant="forest_adventurer"
+            variant={playerVariant.current}
           />
           {/* SpriteSheet example */}
           <SpriteSheet
