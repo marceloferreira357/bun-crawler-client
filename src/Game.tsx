@@ -3,7 +3,11 @@ import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { playerDefaultAttributes } from "./common/constants";
 import { Direction, PlayerGender, PlayerVariant } from "./common/types";
-import { handleBoxCollision, interpolatePosition } from "./common/utils";
+import {
+  centerPlayer,
+  handleBoxCollision,
+  updateRelativePosition,
+} from "./common/utils";
 import Camera from "./components/Camera/Camera";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
@@ -32,13 +36,28 @@ function Game() {
   const pingAccumulator = useRef(0);
   const pingInterval = useRef(5000);
 
-  const entityPosition = useRef({
-    x: 150,
-    y: 150,
-  });
   const entityDirection = useRef<Direction>("right");
   const playerGender = useRef<PlayerGender>("male");
-  const playerVariant = useRef<PlayerVariant>("ember_champion");
+  const playerVariant = useRef<PlayerVariant>("inferno_knight");
+
+  const cameraZoom = useRef(1);
+
+  const relativePlayerPosition = useRef({
+    x: 0,
+    y: 0,
+  });
+  const playerPosition = useRef({
+    x: 100,
+    y: 100,
+  });
+  const relativeBoxPosition = useRef({
+    x: 300,
+    y: 300,
+  });
+  const boxPosition = useRef({
+    x: 300,
+    y: 300,
+  });
 
   const isPlayerColliding = useRef(false);
   const collisionAudio = useAudio({
@@ -52,34 +71,42 @@ function Game() {
   const update = () => {
     const velocity = 0.2 * deltaTime;
 
-    const targetPosition = {
-      ...entityPosition.current,
+    const playerTargetPosition = {
+      ...playerPosition.current,
     };
 
-    // Update target position based on key presses
+    // update the camera zoom
+    if (pressedKeys.includes("=")) {
+      cameraZoom.current += 0.01;
+    }
+    if (pressedKeys.includes("-")) {
+      cameraZoom.current -= 0.01;
+    }
+
+    // update target position based on key presses
     if (pressedKeys.includes("w") || pressedKeys.includes("W")) {
       entityDirection.current = "up";
-      targetPosition.y -= velocity;
+      playerTargetPosition.y -= velocity;
     }
     if (pressedKeys.includes("s") || pressedKeys.includes("S")) {
       entityDirection.current = "down";
-      targetPosition.y += velocity;
+      playerTargetPosition.y += velocity;
     }
     if (pressedKeys.includes("a") || pressedKeys.includes("A")) {
       entityDirection.current = "left";
-      targetPosition.x -= velocity;
+      playerTargetPosition.x -= velocity;
     }
     if (pressedKeys.includes("d") || pressedKeys.includes("D")) {
       entityDirection.current = "right";
-      targetPosition.x += velocity;
+      playerTargetPosition.x += velocity;
     }
 
     // check for collisions
     if (
       handleBoxCollision(
         {
-          x: targetPosition.x,
-          y: targetPosition.y,
+          x: playerTargetPosition.x,
+          y: playerTargetPosition.y,
           width:
             playerDefaultAttributes[playerVariant.current][playerGender.current]
               .size.width * 3,
@@ -88,8 +115,8 @@ function Game() {
               .size.height * 3,
         },
         {
-          x: 300,
-          y: 300,
+          x: boxPosition.current.x,
+          y: boxPosition.current.y,
           width: 16 * 3,
           height: 16 * 3,
         }
@@ -103,20 +130,33 @@ function Game() {
     } else {
       // update the player's position only if there is no collision
       isPlayerColliding.current = false;
-
-      // interpolate current position towards the target position
-      const alpha = 0.9;
-      entityPosition.current.x = interpolatePosition(
-        entityPosition.current.x,
-        targetPosition.x,
-        alpha
-      );
-      entityPosition.current.y = interpolatePosition(
-        entityPosition.current.y,
-        targetPosition.y,
-        alpha
-      );
+      playerPosition.current = { ...playerTargetPosition };
     }
+
+    // adjust positions based on fixed player position
+    const alpha = 1;
+
+    // center the player
+    relativePlayerPosition.current = {
+      ...centerPlayer(
+        relativePlayerPosition.current,
+        windowSize,
+        playerVariant.current,
+        playerGender.current,
+        3,
+        alpha
+      ),
+    };
+
+    // calculate the game objects relative position
+    relativeBoxPosition.current = {
+      ...updateRelativePosition(
+        relativePlayerPosition.current,
+        boxPosition.current,
+        playerPosition.current,
+        alpha
+      ),
+    };
 
     // calculating ping
     pingAccumulator.current += deltaTime;
@@ -134,10 +174,21 @@ function Game() {
       {/* scenes */}
       <Scene size={{ width: "100dvw", height: "100dvh" }} update={update}>
         {/* rendering the camera */}
-        <Camera position={{ x: 0, y: 0 }} size={windowSize} zoom={1}>
+        <Camera
+          position={{ x: 0, y: 0 }}
+          size={windowSize}
+          zoom={cameraZoom.current}
+        >
           {/* rendering game objects */}
+          <div
+            style={{
+              width: "100dvw",
+              height: "100dvh",
+              backgroundColor: "blue",
+            }}
+          />
           <Player
-            position={entityPosition.current}
+            position={relativePlayerPosition.current}
             gender={playerGender.current}
             direction={entityDirection.current}
             scale={3}
@@ -161,10 +212,7 @@ function Game() {
                 import.meta.env.VITE_PUBLIC_ADDRESS
               )
             }
-            position={{
-              x: 300,
-              y: 300,
-            }}
+            position={relativeBoxPosition.current}
             scale={3}
             size={{
               width: 512,

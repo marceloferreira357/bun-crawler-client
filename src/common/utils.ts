@@ -1,4 +1,11 @@
-import { Circle, Rectangle } from "./types";
+import { playerDefaultAttributes } from "./constants";
+import {
+  Circle,
+  PlayerGender,
+  PlayerVariant,
+  Rectangle,
+  Vector2,
+} from "./types";
 
 export const fixDecimalPlaces = (num: number, maxDecimals: number) => {
   return Number(num.toFixed(maxDecimals));
@@ -41,4 +48,59 @@ export const handleCircleCollision = (
   const isColliding = distance < circle1.radius + circle2.radius;
 
   return isColliding;
+};
+
+export const centerPlayer = (
+  relativePlayerPosition: Vector2,
+  windowSize: {
+    width: number | null;
+    height: number | null;
+  },
+  playerVariant: PlayerVariant,
+  playerGender: PlayerGender,
+  scale: number,
+  alpha: number
+) => {
+  const {
+    size: { width, height },
+  } = playerDefaultAttributes[playerVariant][playerGender];
+
+  const x = interpolatePosition(
+    relativePlayerPosition.x,
+    (windowSize.width || 0) / 2 - (width * scale) / 2,
+    alpha
+  );
+  const y = interpolatePosition(
+    relativePlayerPosition.y,
+    (windowSize.height || 0) / 2 - (height * scale) / 2,
+    alpha
+  );
+
+  return {
+    x,
+    y,
+  };
+};
+
+export const updateRelativePosition = (
+  relativePlayerPosition: Vector2,
+  position: Vector2,
+  playerPosition: Vector2,
+  alpha: number
+) => {
+  const x = interpolatePosition(
+    relativePlayerPosition.x,
+    relativePlayerPosition.x + position.x - playerPosition.x,
+    alpha
+  );
+  const y = interpolatePosition(
+    relativePlayerPosition.y,
+    relativePlayerPosition.y + position.y - playerPosition.y,
+    alpha
+  );
+
+  return {
+    x,
+    y,
+  };
 };
