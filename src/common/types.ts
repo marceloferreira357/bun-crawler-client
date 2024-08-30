@@ -67,6 +67,8 @@ export type BasePlayer = {
 export type BaseEnemy = BaseCharacter;
 
 export type MapTileVariant =
+  | "column"
+  | "column_wall"
   | "wall_fountain_mid_blue"
   | "wall_fountain_mid_red"
   | "wall_fountain_basin_red"
@@ -129,6 +131,12 @@ export type MapTileVariant =
   | "wall_fountain_top_1"
   | "wall_fountain_top_2"
   | "wall_fountain_top_3";
+
+export type MapTileDefaultAttributes = {
+  [key in MapTileVariant]: {
+    size: PixelSize;
+  };
+};
 
 export type BaseMapTile = Omit<Entity, "size" | "scale"> & {
   scale?: number;

@@ -3,6 +3,8 @@ import ButtonBlueDown from "./ButtonBlueDown";
 import ButtonBlueUp from "./ButtonBlueUp";
 import ButtonRedDown from "./ButtonRedDown";
 import ButtonRedUp from "./ButtonRedUp";
+import Column from "./Column";
+import ColumnWall from "./ColumnWall";
 import DoorsFrameLeft from "./DoorsFrameLeft";
 import DoorsFrameRight from "./DoorsFrameRight";
 import DoorsFrameTop from "./DoorsFrameTop";
@@ -64,6 +66,10 @@ import WallTopRight from "./WallTopRight";
 
 function MapTile({ variant, position, scale, zIndex }: BaseMapTile) {
   switch (variant) {
+    case "column":
+      return <Column position={position} scale={scale} zIndex={zIndex} />;
+    case "column_wall":
+      return <ColumnWall position={position} scale={scale} zIndex={zIndex} />;
     case "wall_fountain_mid_blue":
       return (
         <WallFountainMidBlue
