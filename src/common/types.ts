@@ -135,4 +135,4 @@ export type BaseMapTile = Omit<Entity, "size" | "scale"> & {
   variant: MapTileVariant;
 };
 
-export type SceneVariant = "lobby";
+export type MapVariant = "lobby";
