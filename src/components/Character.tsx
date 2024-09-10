@@ -28,7 +28,10 @@ function Character({
       tileFlip.current = false;
     }
 
-    if (pressedKeys?.length) {
+    const movementKeys = ["w", "W", "a", "A", "s", "S", "d", "D"];
+    const isMoving = pressedKeys.some((key) => movementKeys.includes(key));
+
+    if (isMoving) {
       if (tileIndex.current < 4 || tileIndex.current > 8) {
         tileIndex.current = 4;
       }
