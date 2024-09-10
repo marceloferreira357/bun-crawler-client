@@ -2,23 +2,28 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { playerDefaultAttributes } from "./common/constants";
-import { Direction, PlayerGender, PlayerVariant } from "./common/types";
+import {
+  Direction,
+  GridMap,
+  GridMapTileRelativePosition,
+  PlayerGender,
+  PlayerVariant,
+} from "./common/types";
 import {
   centerPlayer,
-  handleBoxCollision,
-  updateRelativePosition,
+  updateRelativeGridMapTilesPositions,
 } from "./common/utils";
 import Camera from "./components/Camera/Camera";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
 import DebugCard from "./components/DebugCard";
+import Map from "./components/Map/Map";
 import Player from "./components/Player/Player";
 import Scene from "./components/Scene";
-import SpriteSheet from "./components/SpriteSheet";
 import useAnimationFrame from "./hooks/useAnimationFrame";
-import useAudio from "./hooks/useAudio";
 import useKeyPress from "./hooks/useKeyPress";
 import useWebSocket from "./hooks/useWebSocket";
+import lobby from "./maps/lobby.json";
 import { clientEmit } from "./network/client";
 import useConnectionStore from "./stores/useConnectionStore";
 import useGameStore from "./stores/useGameStore";
@@ -50,23 +55,34 @@ function Game() {
     x: 100,
     y: 100,
   });
-  const relativeBoxPosition = useRef({
+
+  const { tiles } = lobby as GridMap;
+  const relativeGridMapTilesPositions = useRef<GridMapTileRelativePosition[]>(
+    tiles.map((griMapTile, index) => ({
+      index,
+      position: griMapTile.position,
+    }))
+  );
+  const gridMapTilesPositions = useRef([
+    ...relativeGridMapTilesPositions.current,
+  ]);
+  /*const relativeBoxPosition = useRef({
     x: 300,
     y: 300,
   });
   const boxPosition = useRef({
     x: 300,
     y: 300,
-  });
+  });*/
 
-  const isPlayerColliding = useRef(false);
+  /*const isPlayerColliding = useRef(false);
   const collisionAudio = useAudio({
     src: new URL(
       "/sfx/RPG_Essentials_Free/12_Player_Movement_SFX/08_Step_rock_02.wav",
       import.meta.env.VITE_PUBLIC_ADDRESS
     ),
     volume: 0.5,
-  });
+  });*/
 
   const update = () => {
     const velocity = 0.2 * deltaTime;
@@ -102,7 +118,7 @@ function Game() {
     }
 
     // check for collisions
-    if (
+    /*if (
       handleBoxCollision(
         {
           x: playerTargetPosition.x,
@@ -131,7 +147,8 @@ function Game() {
       // update the player's position only if there is no collision
       isPlayerColliding.current = false;
       playerPosition.current = { ...playerTargetPosition };
-    }
+    }*/
+    playerPosition.current = { ...playerTargetPosition };
 
     // adjust positions based on fixed player position
     const alpha = 1;
@@ -149,14 +166,27 @@ function Game() {
     };
 
     // calculate the game objects relative position
-    relativeBoxPosition.current = {
+    /*relativeBoxPosition.current = {
       ...updateRelativePosition(
         relativePlayerPosition.current,
         boxPosition.current,
         playerPosition.current,
         alpha
       ),
-    };
+    };*/
+    const updatedRelativeGridMapTilesPositions =
+      updateRelativeGridMapTilesPositions(
+        relativeGridMapTilesPositions.current,
+        gridMapTilesPositions.current,
+        relativePlayerPosition.current,
+        playerPosition.current,
+        alpha
+      );
+
+    // Update the reference to relative grid map tiles positions
+    relativeGridMapTilesPositions.current = [
+      ...updatedRelativeGridMapTilesPositions,
+    ];
 
     // calculating ping
     pingAccumulator.current += deltaTime;
@@ -187,6 +217,10 @@ function Game() {
               backgroundColor: "blue",
             }}
           />
+          <Map
+            variant="lobby"
+            relativePositions={relativeGridMapTilesPositions.current}
+          />
           <Player
             position={relativePlayerPosition.current}
             gender={playerGender.current}
@@ -205,7 +239,7 @@ function Game() {
             variant={playerVariant.current}
           />
           {/* SpriteSheet example */}
-          <SpriteSheet
+          {/*<SpriteSheet
             src={
               new URL(
                 "/sprites/0x72_DungeonTilesetII_v1.7/0x72_DungeonTilesetII_v1.7.png",
@@ -228,7 +262,7 @@ function Game() {
                 height: 16,
               },
             }}
-          />
+          />*/}
         </Camera>
       </Scene>
     </div>

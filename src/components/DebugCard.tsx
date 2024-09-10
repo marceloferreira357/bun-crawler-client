@@ -20,6 +20,10 @@ function DebugCard() {
         display: "flex",
         flexDirection: "column",
         zIndex: zIndex.debugCard,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        padding: "8px",
+        borderRadius: "8px",
+        minWidth: "260px",
       }}
     >
       <div

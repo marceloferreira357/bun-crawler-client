@@ -1,6 +1,7 @@
 import { playerDefaultAttributes } from "./constants";
 import {
   Circle,
+  GridMapTileRelativePosition,
   PlayerGender,
   PlayerVariant,
   Rectangle,
@@ -103,4 +104,44 @@ export const updateRelativePosition = (
     x,
     y,
   };
+};
+
+export const updateRelativeGridMapTilesPositions = (
+  relativeGridMapTilesPositions: GridMapTileRelativePosition[],
+  gridMapTilesPositions: GridMapTileRelativePosition[],
+  relativePlayerPosition: Vector2,
+  playerPosition: Vector2,
+  alpha: number
+) => {
+  const gridMapTilesPositionMap = new Map<number, Vector2>(
+    gridMapTilesPositions.map((gridMapTileRelativePosition) => [
+      gridMapTileRelativePosition.index,
+      gridMapTileRelativePosition.position!,
+    ])
+  );
+
+  const updatedRelativeGridMapTilesPositions =
+    relativeGridMapTilesPositions.map((relativeGridMapTilesPosition) => {
+      const gridMapTilePosition = gridMapTilesPositionMap.get(
+        relativeGridMapTilesPosition.index
+      );
+
+      if (gridMapTilePosition) {
+        const newPosition = updateRelativePosition(
+          relativePlayerPosition,
+          gridMapTilePosition!,
+          playerPosition,
+          alpha
+        );
+
+        return {
+          ...relativeGridMapTilesPosition,
+          position: newPosition,
+        };
+      }
+
+      return relativeGridMapTilesPosition;
+    });
+
+  return updatedRelativeGridMapTilesPositions;
 };

@@ -144,3 +144,22 @@ export type BaseMapTile = Omit<Entity, "size" | "scale"> & {
 };
 
 export type MapVariant = "lobby";
+
+export type GridMapTile = Omit<BaseMapTile, "scale">;
+
+export type GridMap = {
+  mapName: string;
+  width: number;
+  height: number;
+  tiles: GridMapTile[];
+};
+
+export type GridMapTileRelativePosition = {
+  index: number;
+  position?: Vector2;
+};
+
+export type BaseMap = {
+  variant: MapVariant;
+  relativePositions: GridMapTileRelativePosition[];
+};
