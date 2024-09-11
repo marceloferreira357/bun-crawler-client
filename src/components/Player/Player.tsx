@@ -13,6 +13,7 @@ function Player({
   size,
   zIndex,
   variant,
+  isMoving,
 }: Omit<BasePlayer, "tiles">) {
   switch (variant) {
     case "forest_adventurer":
@@ -24,6 +25,7 @@ function Player({
           scale={scale}
           size={size}
           zIndex={zIndex}
+          isMoving={isMoving}
         />
       );
     case "inferno_knight":
@@ -35,6 +37,7 @@ function Player({
           scale={scale}
           size={size}
           zIndex={zIndex}
+          isMoving={isMoving}
         />
       );
     case "arcane_sage":
@@ -46,6 +49,7 @@ function Player({
           scale={scale}
           size={size}
           zIndex={zIndex}
+          isMoving={isMoving}
         />
       );
     case "orc_marauder":
@@ -57,6 +61,7 @@ function Player({
           scale={scale}
           size={size}
           zIndex={zIndex}
+          isMoving={isMoving}
         />
       );
     case "ember_champion":
@@ -68,6 +73,7 @@ function Player({
           scale={scale}
           size={size}
           zIndex={zIndex}
+          isMoving={isMoving}
         />
       );
     default:

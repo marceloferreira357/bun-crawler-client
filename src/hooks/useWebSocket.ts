@@ -7,21 +7,27 @@ import {
   handleOnDisconnectEvent,
   handleOnPongEvent,
   handleOnServerFullEvent,
+  handleOnUpdateSceneEvent,
 } from "../network/events";
 import useConnectionStore from "../stores/useConnectionStore";
+import useSceneStore from "../stores/useSceneStore";
 
 const useWebSocket = () => {
-  const { socket, setPing } = useConnectionStore(useShallow((state) => state));
+  const { socket, setPing, setConnectionStatus } = useConnectionStore(
+    useShallow((state) => state)
+  );
+  const { setScene, setPlayers } = useSceneStore(useShallow((state) => state));
   useConnectionStore;
 
   useEffect(() => {
     clientConnect(socket);
 
-    handleOnConnectEvent(socket);
-    handleOnConnectErrorEvent(socket);
-    handleOnDisconnectEvent(socket);
-    handleOnServerFullEvent(socket);
+    handleOnConnectEvent(socket, setConnectionStatus);
+    handleOnConnectErrorEvent(socket, setConnectionStatus);
+    handleOnDisconnectEvent(socket, setConnectionStatus);
+    handleOnServerFullEvent(socket, setConnectionStatus);
     handleOnPongEvent(socket, setPing);
+    handleOnUpdateSceneEvent(socket, setScene, setPlayers);
 
     return () => {
       clientDisconnect(socket);

@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { BaseCharacter } from "../common/types";
-import useKeyPress from "../hooks/useKeyPress";
 import useGameStore from "../stores/useGameStore";
 import SpriteSheet from "./SpriteSheet";
 
@@ -11,14 +10,13 @@ function Character({
   scale = 1,
   size,
   tiles,
+  isMoving,
 }: BaseCharacter) {
   const { deltaTime } = useGameStore(useShallow((state) => state));
 
   const tileIndex = useRef(0);
   const tileFlip = useRef(false);
   const animationTime = useRef(0);
-
-  const pressedKeys = useKeyPress();
 
   const animationInterval = useRef(180);
   const update = () => {
@@ -27,9 +25,6 @@ function Character({
     } else if (direction === "right") {
       tileFlip.current = false;
     }
-
-    const movementKeys = ["w", "W", "a", "A", "s", "S", "d", "D"];
-    const isMoving = pressedKeys.some((key) => movementKeys.includes(key));
 
     if (isMoving) {
       if (tileIndex.current < 4 || tileIndex.current > 8) {

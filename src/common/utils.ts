@@ -1,10 +1,10 @@
 import { playerDefaultAttributes } from "./constants";
 import {
   Circle,
-  GridMapTileRelativePosition,
   PlayerGender,
   PlayerVariant,
   Rectangle,
+  RelativePosition,
   Vector2,
 } from "./types";
 
@@ -106,42 +106,43 @@ export const updateRelativePosition = (
   };
 };
 
-export const updateRelativeGridMapTilesPositions = (
-  relativeGridMapTilesPositions: GridMapTileRelativePosition[],
-  gridMapTilesPositions: GridMapTileRelativePosition[],
+export const getPositionsMap = (positions: RelativePosition[]) => {
+  const positionsMap = new Map(
+    positions.map(({ id, position }) => [id, position])
+  );
+  return positionsMap;
+};
+
+export const updateRelativePositions = (
+  relativePositions: RelativePosition[],
+  positions: RelativePosition[],
   relativePlayerPosition: Vector2,
   playerPosition: Vector2,
   alpha: number
 ) => {
-  const gridMapTilesPositionMap = new Map<number, Vector2>(
-    gridMapTilesPositions.map((gridMapTileRelativePosition) => [
-      gridMapTileRelativePosition.index,
-      gridMapTileRelativePosition.position!,
-    ])
-  );
+  const positionsMap = getPositionsMap(positions);
 
-  const updatedRelativeGridMapTilesPositions =
-    relativeGridMapTilesPositions.map((relativeGridMapTilesPosition) => {
-      const gridMapTilePosition = gridMapTilesPositionMap.get(
-        relativeGridMapTilesPosition.index
-      );
+  const updatedRelativePositions = relativePositions.map(
+    (currentRelativePosition) => {
+      const position = positionsMap.get(currentRelativePosition.id);
 
-      if (gridMapTilePosition) {
+      if (position) {
         const newPosition = updateRelativePosition(
           relativePlayerPosition,
-          gridMapTilePosition!,
+          position,
           playerPosition,
           alpha
         );
 
         return {
-          ...relativeGridMapTilesPosition,
+          ...currentRelativePosition,
           position: newPosition,
         };
       }
 
-      return relativeGridMapTilesPosition;
-    });
+      return currentRelativePosition;
+    }
+  );
 
-  return updatedRelativeGridMapTilesPositions;
+  return updatedRelativePositions;
 };

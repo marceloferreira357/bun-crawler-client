@@ -1,27 +1,44 @@
 import { Socket } from "socket.io-client";
+import { ConnectionStatus, ScenePlayer, SceneVariant } from "../common/types";
 
-export const handleOnConnectEvent = (socket: Socket) => {
+export const handleOnConnectEvent = (
+  socket: Socket,
+  setConnectionStatus: (connectionStatus: ConnectionStatus) => void
+) => {
   socket.on("connect", () => {
     console.log("Connected");
+    setConnectionStatus("connected");
   });
 };
 
-export const handleOnConnectErrorEvent = (socket: Socket) => {
+export const handleOnConnectErrorEvent = (
+  socket: Socket,
+  setConnectionStatus: (connectionStatus: ConnectionStatus) => void
+) => {
   socket.on("connect_error", (reason: Error) => {
     console.log("Error on connect reason: ", reason);
+    setConnectionStatus("connection_error");
   });
 };
 
-export const handleOnDisconnectEvent = (socket: Socket) => {
+export const handleOnDisconnectEvent = (
+  socket: Socket,
+  setConnectionStatus: (connectionStatus: ConnectionStatus) => void
+) => {
   socket.on("disconnect", (reason: Socket.DisconnectReason) => {
     console.log("Disconnected reason:", reason);
+    setConnectionStatus("connection_lost");
   });
 };
 
-export const handleOnServerFullEvent = (socket: Socket) => {
+export const handleOnServerFullEvent = (
+  socket: Socket,
+  setConnectionStatus: (connectionStatus: ConnectionStatus) => void
+) => {
   socket.on("server_full", () => {
     socket.disconnect();
     console.log("Disconnected, server is full");
+    setConnectionStatus("disconnected");
   });
 };
 
@@ -33,5 +50,16 @@ export const handleOnPongEvent = (
     const receivedTimestamp = Date.now();
     const ping = receivedTimestamp - args[0];
     setPing(ping);
+  });
+};
+
+export const handleOnUpdateSceneEvent = (
+  socket: Socket,
+  setScene: (scene: SceneVariant) => void,
+  setPlayers: (players: ScenePlayer[]) => void
+) => {
+  socket.on("update_scene", (...args: any[]) => {
+    setScene(args[0]);
+    setPlayers(args[1]);
   });
 };

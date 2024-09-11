@@ -1,16 +1,17 @@
 import { BaseMap, GridMap } from "../../common/types";
+import { getPositionsMap } from "../../common/utils";
 import lobby from "../../maps/lobby.json";
 import MapTile from "../MapTile/MapTile";
-import { getRelativeGridMapTilesPositionsMap } from "./mapUtils";
 
 function Lobby({ relativePositions }: Omit<BaseMap, "variant">) {
   const { tiles } = lobby as GridMap;
 
-  const relativeGridMapTilesPositionsMap =
-    getRelativeGridMapTilesPositionsMap(relativePositions);
+  const relativeGridMapTilesPositionsMap = getPositionsMap(relativePositions);
 
   return tiles.map(({ variant, zIndex }, index) => {
-    const relativePosition = relativeGridMapTilesPositionsMap.get(index);
+    const relativePosition = relativeGridMapTilesPositionsMap.get(
+      String(index)
+    );
 
     return (
       <MapTile

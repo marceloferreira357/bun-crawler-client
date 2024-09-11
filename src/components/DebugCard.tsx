@@ -4,12 +4,16 @@ import { fixDecimalPlaces } from "../common/utils";
 import useCursorPosition from "../hooks/useCursorPosition";
 import useConnectionStore from "../stores/useConnectionStore";
 import useGameStore from "../stores/useGameStore";
+import useSceneStore from "../stores/useSceneStore";
 import Text from "./Text";
 
 function DebugCard() {
   const { x = 0, y = 0 } = useCursorPosition();
   const { fps, deltaTime } = useGameStore(useShallow((state) => state));
-  const { socket, ping } = useConnectionStore(useShallow((state) => state));
+  const { socket, connectionStatus, ping } = useConnectionStore(
+    useShallow((state) => state)
+  );
+  const { scene, players } = useSceneStore(useShallow((state) => state));
 
   return (
     <div
@@ -48,11 +52,14 @@ function DebugCard() {
       </Text>
       <Text fontSize={"1.5rem"}>
         connected:{" "}
-        <Text fontSize={"1.5rem"} color={socket.connected ? "green" : "red"}>
-          {socket.connected ? "true" : "false"}
+        <Text
+          fontSize={"1.5rem"}
+          color={connectionStatus === "connected" ? "green" : "red"}
+        >
+          {connectionStatus === "connected" ? "true" : "false"}
         </Text>
       </Text>
-      {socket.connected && (
+      {connectionStatus === "connected" && (
         <>
           <Text fontSize={"1.5rem"}>
             ping:{" "}
@@ -75,6 +82,8 @@ function DebugCard() {
       <Text fontSize={"1.5rem"}>
         cursor position: ({x}, {y})
       </Text>
+      <Text fontSize={"1.5rem"}>scene: {scene}</Text>
+      <Text fontSize={"1.5rem"}>connected players: {players?.length}</Text>
     </div>
   );
 }

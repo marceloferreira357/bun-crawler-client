@@ -9,6 +9,7 @@ function ArcaneSage({
   scale = 1,
   size,
   zIndex,
+  isMoving,
 }: Omit<BasePlayer, "variant" | "tiles">) {
   const tiles: PlayerTiles = {
     female: [
@@ -43,6 +44,7 @@ function ArcaneSage({
       position={position}
       scale={scale}
       zIndex={zIndex}
+      isMoving={isMoving}
     />
   );
 }

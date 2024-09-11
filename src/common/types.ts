@@ -40,6 +40,7 @@ export type BaseCharacter = Omit<Entity, "size" | "scale"> & {
   scale?: number;
   size: PixelSize;
   tiles: Tile[];
+  isMoving: boolean;
 };
 
 export type PlayerVariant =
@@ -144,6 +145,21 @@ export type BaseMapTile = Omit<Entity, "size" | "scale"> & {
 };
 
 export type MapVariant = "lobby";
+export type SceneVariant = MapVariant;
+
+export type ScenePlayer = Pick<BaseCharacter, "isMoving"> & {
+  id: string;
+  position: Vector2;
+  size: PixelSize;
+  direction: Direction;
+  gender: PlayerGender;
+  variant: PlayerVariant;
+};
+
+export type RelativePosition = {
+  id: string;
+  position?: Vector2;
+};
 
 export type GridMapTile = Omit<BaseMapTile, "scale">;
 
@@ -154,12 +170,14 @@ export type GridMap = {
   tiles: GridMapTile[];
 };
 
-export type GridMapTileRelativePosition = {
-  index: number;
-  position?: Vector2;
-};
-
 export type BaseMap = {
   variant: MapVariant;
-  relativePositions: GridMapTileRelativePosition[];
+  relativePositions: RelativePosition[];
 };
+
+export type ConnectionStatus =
+  | "connecting"
+  | "connected"
+  | "disconnected"
+  | "connection_lost"
+  | "connection_error";

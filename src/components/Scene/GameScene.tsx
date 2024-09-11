@@ -1,12 +1,17 @@
-import { Size } from "../common/types";
+import { Size } from "../../common/types";
 
-type SceneProps = {
+type GameSceneProps = {
   size: Size;
   update: () => void;
   children: React.ReactNode;
 } & Pick<React.CSSProperties, "backgroundColor">;
 
-function Scene({ size, backgroundColor, update, children }: SceneProps) {
+function GameScene({
+  size,
+  backgroundColor,
+  update,
+  children,
+}: GameSceneProps) {
   update();
 
   return (
@@ -21,4 +26,4 @@ function Scene({ size, backgroundColor, update, children }: SceneProps) {
   );
 }
 
-export default Scene;
+export default GameScene;
