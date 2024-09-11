@@ -31,7 +31,15 @@ export type CursorVariant =
   | "pointing"
   | "holding";
 
-export type Direction = "up" | "left" | "down" | "right";
+export type Direction =
+  | "up"
+  | "left"
+  | "down"
+  | "right"
+  | "up_left"
+  | "up_right"
+  | "down_left"
+  | "down_right";
 
 export type Tile = Vector2 & PixelSize;
 

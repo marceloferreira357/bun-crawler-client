@@ -2,7 +2,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { playerDefaultAttributes } from "../../common/constants";
-import { RelativePosition, Vector2 } from "../../common/types";
+import { Direction, RelativePosition, Vector2 } from "../../common/types";
 import {
   centerPlayer,
   getPositionsMap,
@@ -68,22 +68,44 @@ function Lobby() {
     }
 
     // Update player target position based on key presses
+    const movingUp = pressedKeys.includes("w") || pressedKeys.includes("W");
+    const movingDown = pressedKeys.includes("s") || pressedKeys.includes("S");
+    const movingLeft = pressedKeys.includes("a") || pressedKeys.includes("A");
+    const movingRight = pressedKeys.includes("d") || pressedKeys.includes("D");
+
     let isMoving = false;
-    if (pressedKeys.includes("w") || pressedKeys.includes("W")) {
+    let newDirection: Direction | undefined;
+    if (movingUp && movingLeft) {
+      newDirection = "up_left";
       isMoving = true;
-      clientEmit(socket, "player_movement", ["up", true]);
+    } else if (movingUp && movingRight) {
+      newDirection = "up_right";
+      isMoving = true;
+    } else if (movingDown && movingLeft) {
+      newDirection = "down_left";
+      isMoving = true;
+    } else if (movingDown && movingRight) {
+      newDirection = "down_right";
+      isMoving = true;
+    } else if (movingUp) {
+      newDirection = "up";
+      isMoving = true;
+    } else if (movingDown) {
+      newDirection = "down";
+      isMoving = true;
+    } else if (movingLeft) {
+      newDirection = "left";
+      isMoving = true;
+    } else if (movingRight) {
+      newDirection = "right";
+      isMoving = true;
     }
-    if (pressedKeys.includes("s") || pressedKeys.includes("S")) {
-      isMoving = true;
-      clientEmit(socket, "player_movement", ["down", true]);
-    }
-    if (pressedKeys.includes("a") || pressedKeys.includes("A")) {
-      isMoving = true;
-      clientEmit(socket, "player_movement", ["left", true]);
-    }
-    if (pressedKeys.includes("d") || pressedKeys.includes("D")) {
-      isMoving = true;
-      clientEmit(socket, "player_movement", ["right", true]);
+
+    if (
+      (!player.isMoving && isMoving) ||
+      (newDirection !== undefined && newDirection !== player.direction)
+    ) {
+      clientEmit(socket, "player_movement", [newDirection, true]);
     }
     if (player.isMoving && !isMoving) {
       clientEmit(socket, "player_movement", [player.direction, false]);
