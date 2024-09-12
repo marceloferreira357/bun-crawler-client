@@ -1,18 +1,74 @@
-# Bun Crawler
+# Bun Crawler Client
 
-**Bun Crawler** is an exciting dungeon crawler game that immerses players in a retro-style adventure, built using the 16x16 DungeonTileset II sprites by [0x72](https://0x72.itch.io/dungeontileset-ii). The game is designed for fans of classic dungeon crawlers and pixel art, offering a rich and engaging gameplay experience.
+This project is the front-end client for the [Bun Crawler Server](https://github.com/marceloferreira357/bun-crawler-server). It provides a user interface for the multiplayer game, handling rendering and user input while the server manages the core game logic.
 
-## Features
+## Prerequisites
 
-- **16x16 DungeonTileset II Sprites**: The game uses the beautifully crafted pixel art sprites by 0x72, giving it a nostalgic and visually appealing aesthetic.
-- **React and TypeScript**: Bun Crawler is entirely written in React and TypeScript, ensuring a modern, maintainable, and scalable codebase.
-- **Vite and Bun**: The game is built and runs using Vite and Bun, providing fast development and build times.
+To run this project, you need:
 
-## Getting Started
+- [Bun](https://bun.sh/)
+- [Vite](https://vitejs.dev/)
 
-### Prerequisites
+## Environment Setup
 
-Before you can run Bun Crawler, ensure you have the following installed:
+Create a `.env` file in the root directory of the project. You can use the `.env.example` file as a template:
 
-- **Bun**: A modern JavaScript runtime that powers the development environment.
-- **Git**: For version control and code management.
+```
+VITE_SERVER_ADDRESS=http://127.0.0.1:4000
+VITE_PUBLIC_ADDRESS=http://127.0.0.1:3000
+```
+
+Make sure to adjust these values according to your setup.
+
+## Running the Project
+
+1. Install dependencies:
+
+   ```
+   bun install
+   ```
+
+2. Start the development server:
+   ```
+   bun run dev
+   ```
+
+The game client will run at 60 FPS, providing a smooth user experience.
+
+## Game Architecture
+
+The Bun Crawler Client establishes a WebSocket connection with the server to share the game state among all connected clients. The server handles all game logic, while the client focuses on rendering and sending user inputs.
+
+### WebSocket Events
+
+The client uses the following WebSocket events to communicate with the server:
+
+```typescript
+export enum Events {
+  CONNECT = "connect",
+  CONNECT_ERROR = "connect_error",
+  DISCONNECT = "disconnect",
+  SERVER_FULL = "server_full",
+  PONG = "pong",
+  UPDATE_SCENE = "update_scene",
+  PLAYER_CONNECTED = "player_connected",
+  PLAYER_DISCONNECTED = "player_disconnected",
+  PLAYER_MOVEMENT = "player_movement",
+  PING = "ping",
+}
+```
+
+- `CONNECT`: Fired when the client successfully connects to the server.
+- `CONNECT_ERROR`: Occurs if there's an error during connection.
+- `DISCONNECT`: Triggered when the client disconnects from the server.
+- `SERVER_FULL`: Sent by the server if it has reached its maximum capacity.
+- `PONG`: Response to a ping event, used for latency calculation.
+- `UPDATE_SCENE`: Received when the server sends updated game state.
+- `PLAYER_CONNECTED`: Fired when a new player joins the game.
+- `PLAYER_DISCONNECTED`: Occurs when a player leaves the game.
+- `PLAYER_MOVEMENT`: Sent by the client to update player movement.
+- `PING`: Sent periodically to measure latency.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
