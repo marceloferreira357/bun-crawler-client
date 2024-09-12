@@ -3,6 +3,7 @@ import ConnectionStatus from "./components/ConnectionStatus/ConnectionStatus";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
 import DebugCard from "./components/DebugCard";
+import PlayerEvents from "./components/PlayerEvents/PlayerEvents";
 import Scene from "./components/Scene/Scene";
 import useAnimationFrame from "./hooks/useAnimationFrame";
 import useWebSocket from "./hooks/useWebSocket";
@@ -25,6 +26,7 @@ function Game() {
       <Cursor />
       <DebugCard />
       <ControllerHud />
+      <PlayerEvents />
       <Scene variant={scene} />
     </div>
   );

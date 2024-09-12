@@ -188,4 +188,24 @@ export type ConnectionStatus =
   | "connected"
   | "disconnected"
   | "connection_lost"
-  | "connection_error";
+  | "connection_error"
+  | "server_full";
+
+export enum Events {
+  CONNECT = "connect",
+  CONNECT_ERROR = "connect_error",
+  DISCONNECT = "disconnect",
+  SERVER_FULL = "server_full",
+  PONG = "pong",
+  UPDATE_SCENE = "update_scene",
+  PLAYER_CONNECTED = "player_connected",
+  PLAYER_DISCONNECTED = "player_disconnected",
+  PLAYER_MOVEMENT = "player_movement",
+  PING = "ping",
+}
+
+export type PlayerEvent = {
+  id: string;
+  socketId: string;
+  event: Events;
+};

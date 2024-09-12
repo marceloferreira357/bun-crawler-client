@@ -2,7 +2,12 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { playerDefaultAttributes } from "../../common/constants";
-import { Direction, RelativePosition, Vector2 } from "../../common/types";
+import {
+  Direction,
+  Events,
+  RelativePosition,
+  Vector2,
+} from "../../common/types";
 import {
   centerPlayer,
   getPositionsMap,
@@ -105,10 +110,10 @@ function Lobby() {
       (!player.isMoving && isMoving) ||
       (newDirection !== undefined && newDirection !== player.direction)
     ) {
-      clientEmit(socket, "player_movement", [newDirection, true]);
+      clientEmit(socket, Events.PLAYER_MOVEMENT, [newDirection, true]);
     }
     if (player.isMoving && !isMoving) {
-      clientEmit(socket, "player_movement", [player.direction, false]);
+      clientEmit(socket, Events.PLAYER_MOVEMENT, [player.direction, false]);
     }
 
     // Center the player and update grid map tiles and other players' positions
@@ -140,7 +145,7 @@ function Lobby() {
     // Calculate and emit ping
     pingAccumulator.current += deltaTime;
     if (pingAccumulator.current >= pingInterval.current) {
-      clientEmit(socket, "ping", [Date.now()]);
+      clientEmit(socket, Events.PING, [Date.now()]);
       pingAccumulator.current = 0;
     }
   };

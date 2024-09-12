@@ -18,11 +18,15 @@ const useWebSocket = () => {
   const { socket, setPing, setConnectionStatus } = useConnectionStore(
     useShallow((state) => state)
   );
-  const { setScene, setPlayers } = useSceneStore(useShallow((state) => state));
+  const { setScene, setPlayers, addPlayerEvent } = useSceneStore(
+    useShallow((state) => state)
+  );
   useConnectionStore;
 
   useEffect(() => {
-    clientConnect(socket);
+    setTimeout(() => {
+      clientConnect(socket);
+    }, 1000);
 
     handleOnConnectEvent(socket, setConnectionStatus);
     handleOnConnectErrorEvent(socket, setConnectionStatus);
@@ -30,8 +34,8 @@ const useWebSocket = () => {
     handleOnServerFullEvent(socket, setConnectionStatus);
     handleOnPongEvent(socket, setPing);
     handleOnUpdateSceneEvent(socket, setScene, setPlayers);
-    handleOnPlayerConnectedEvent(socket);
-    handleOnPlayerDisconnectedEvent(socket);
+    handleOnPlayerConnectedEvent(socket, addPlayerEvent);
+    handleOnPlayerDisconnectedEvent(socket, addPlayerEvent);
 
     return () => {
       clientDisconnect(socket);

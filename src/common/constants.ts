@@ -4,6 +4,7 @@ export const zIndex = {
   cursor: 10,
   debugCard: 9,
   controllerHud: 9,
+  playerEvents: 9,
 };
 
 export const credits = [

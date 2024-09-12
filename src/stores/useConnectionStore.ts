@@ -14,7 +14,7 @@ const useConnectionStore = create<{
     autoConnect: false,
     reconnection: false,
   }),
-  connectionStatus: "disconnected",
+  connectionStatus: "connecting",
   setPing: (ping: number) => set((state) => ({ ...state, ping })),
   setConnectionStatus: (connectionStatus: ConnectionStatus) =>
     set((state) => ({ ...state, connectionStatus })),
