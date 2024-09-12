@@ -5,6 +5,8 @@ import {
   handleOnConnectErrorEvent,
   handleOnConnectEvent,
   handleOnDisconnectEvent,
+  handleOnPlayerConnectedEvent,
+  handleOnPlayerDisconnectedEvent,
   handleOnPongEvent,
   handleOnServerFullEvent,
   handleOnUpdateSceneEvent,
@@ -28,6 +30,8 @@ const useWebSocket = () => {
     handleOnServerFullEvent(socket, setConnectionStatus);
     handleOnPongEvent(socket, setPing);
     handleOnUpdateSceneEvent(socket, setScene, setPlayers);
+    handleOnPlayerConnectedEvent(socket);
+    handleOnPlayerDisconnectedEvent(socket);
 
     return () => {
       clientDisconnect(socket);

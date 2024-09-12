@@ -63,3 +63,15 @@ export const handleOnUpdateSceneEvent = (
     setPlayers(args[1]);
   });
 };
+
+export const handleOnPlayerConnectedEvent = (socket: Socket) => {
+  socket.on("player_connected", (...args: any[]) => {
+    console.log("Player connected:", args[0]);
+  });
+};
+
+export const handleOnPlayerDisconnectedEvent = (socket: Socket) => {
+  socket.on("player_disconnected", (...args: any[]) => {
+    console.log("Player disconnected:", args[0]);
+  });
+};
