@@ -1,5 +1,5 @@
 import { BasePlayer } from "../../common/types";
-import Character from "../Character";
+import Character from "../Character/Character";
 import { PlayerTiles } from "./playerTypes";
 
 function ArcaneSage({
@@ -10,6 +10,7 @@ function ArcaneSage({
   size,
   zIndex,
   isMoving,
+  name,
 }: Omit<BasePlayer, "variant" | "tiles">) {
   const tiles: PlayerTiles = {
     female: [
@@ -45,6 +46,7 @@ function ArcaneSage({
       scale={scale}
       zIndex={zIndex}
       isMoving={isMoving}
+      name={name}
     />
   );
 }

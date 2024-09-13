@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { BaseCharacter } from "../common/types";
-import useGameStore from "../stores/useGameStore";
-import SpriteSheet from "./SpriteSheet";
+import { BaseCharacter } from "../../common/types";
+import useGameStore from "../../stores/useGameStore";
+import SpriteSheet from "../SpriteSheet";
+import NameBadge from "./NameBadge";
 
 function Character({
   position,
@@ -11,6 +12,7 @@ function Character({
   size,
   tiles,
   isMoving,
+  name,
 }: BaseCharacter) {
   const { deltaTime } = useGameStore(useShallow((state) => state));
 
@@ -66,13 +68,14 @@ function Character({
         left: position?.x,
         width: size.width * scale,
         height: size.height * scale,
-        transform: tileFlip.current ? "scaleX(-1)" : "none",
       }}
     >
+      {name && <NameBadge name={name} size={size} scale={scale} />}
       <div
         style={{
           width: tiles[tileIndex.current].width * scale,
           height: tiles[tileIndex.current].height * scale,
+          transform: tileFlip.current ? "scaleX(-1)" : "none",
         }}
       >
         <SpriteSheet

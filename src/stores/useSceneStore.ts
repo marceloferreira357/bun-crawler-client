@@ -19,10 +19,21 @@ const useSceneStore = create<{
   setPlayerEvents: (playerEvents: PlayerEvent[]) =>
     set((state) => ({ ...state, playerEvents })),
   addPlayerEvent: (playerEvent: PlayerEvent) =>
-    set((state) => ({
-      ...state,
-      playerEvents: [...state.playerEvents, playerEvent],
-    })),
+    set((state) => {
+      const alreadyExists = state.playerEvents.some(
+        ({ socketId, event }) =>
+          playerEvent.socketId === socketId && playerEvent.event === event
+      );
+
+      if (alreadyExists) {
+        return { ...state };
+      }
+
+      return {
+        ...state,
+        playerEvents: [...state.playerEvents, playerEvent],
+      };
+    }),
 }));
 
 export default useSceneStore;

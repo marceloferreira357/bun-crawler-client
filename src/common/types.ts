@@ -49,6 +49,7 @@ export type BaseCharacter = Omit<Entity, "size" | "scale"> & {
   size: PixelSize;
   tiles: Tile[];
   isMoving: boolean;
+  name?: string;
 };
 
 export type PlayerVariant =

@@ -1,5 +1,5 @@
 import { BasePlayer } from "../../common/types";
-import Character from "../Character";
+import Character from "../Character/Character";
 import { PlayerTiles } from "./playerTypes";
 
 function ForestAdventurer({
@@ -10,6 +10,7 @@ function ForestAdventurer({
   size,
   zIndex,
   isMoving,
+  name,
 }: Omit<BasePlayer, "variant" | "tiles">) {
   const tiles: PlayerTiles = {
     female: [
@@ -45,6 +46,7 @@ function ForestAdventurer({
       scale={scale}
       zIndex={zIndex}
       isMoving={isMoving}
+      name={name}
     />
   );
 }

@@ -1,7 +1,6 @@
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { playerDefaultAttributes } from "../../common/constants";
 import {
   Direction,
   Events,
@@ -173,15 +172,12 @@ function Lobby() {
             direction={player.direction}
             scale={3}
             size={{
-              width:
-                playerDefaultAttributes[player.variant][player.gender].size
-                  .width,
-              height:
-                playerDefaultAttributes[player.variant][player.gender].size
-                  .height,
+              width: player.size.width,
+              height: player.size.height,
             }}
             variant={player.variant}
             isMoving={player.isMoving}
+            name={player.id}
           />
         ))}
       </Camera>
