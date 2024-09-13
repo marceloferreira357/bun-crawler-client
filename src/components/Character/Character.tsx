@@ -22,9 +22,17 @@ function Character({
 
   const animationInterval = useRef(180);
   const update = () => {
-    if (direction === "left") {
+    if (
+      direction === "left" ||
+      direction === "up_left" ||
+      direction === "down_left"
+    ) {
       tileFlip.current = true;
-    } else if (direction === "right") {
+    } else if (
+      direction === "right" ||
+      direction === "up_right" ||
+      direction === "down_right"
+    ) {
       tileFlip.current = false;
     }
 
