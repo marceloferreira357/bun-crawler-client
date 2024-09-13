@@ -4,6 +4,7 @@ import {
   ConnectionStatus,
   Events,
   PlayerEvent,
+  PlayerMessage,
   ScenePlayer,
   SceneVariant,
 } from "../common/types";
@@ -91,6 +92,19 @@ export const handleOnPlayerDisconnectedEvent = (
       id: uuidv4(),
       socketId: args[0],
       event: Events.PLAYER_DISCONNECTED,
+    });
+  });
+};
+
+export const handleOnPlayerMessageSceneEvent = (
+  socket: Socket,
+  addPlayerMessage: (playerMessage: PlayerMessage) => void
+) => {
+  socket.on(Events.PLAYER_MESSAGE_SCENE, (...args: any[]) => {
+    addPlayerMessage({
+      id: uuidv4(),
+      socketId: args[0],
+      message: args[1],
     });
   });
 };

@@ -55,6 +55,8 @@ export enum Events {
   PLAYER_DISCONNECTED = "player_disconnected",
   PLAYER_MOVEMENT = "player_movement",
   PING = "ping",
+  PLAYER_MESSAGE = "player_message_send",
+  PLAYER_MESSAGE_SCENE = "player_message_scene",
 }
 ```
 
@@ -68,6 +70,8 @@ export enum Events {
 - `PLAYER_DISCONNECTED`: Occurs when a player leaves the game.
 - `PLAYER_MOVEMENT`: Sent by the client to update player movement.
 - `PING`: Sent periodically to measure latency.
+- `PLAYER_MESSAGE`: Sent by the client to broadcast player messages.
+- `PLAYER_MESSAGE_SCENE`: Received when the server sends player messages.
 
 ## Contributing
 

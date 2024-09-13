@@ -203,10 +203,18 @@ export enum Events {
   PLAYER_DISCONNECTED = "player_disconnected",
   PLAYER_MOVEMENT = "player_movement",
   PING = "ping",
+  PLAYER_MESSAGE = "player_message_send",
+  PLAYER_MESSAGE_SCENE = "player_message_scene",
 }
 
 export type PlayerEvent = {
   id: string;
   socketId: string;
   event: Events;
+};
+
+export type PlayerMessage = {
+  id: string;
+  socketId: string;
+  message: string;
 };

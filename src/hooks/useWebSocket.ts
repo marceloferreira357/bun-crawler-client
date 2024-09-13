@@ -7,6 +7,7 @@ import {
   handleOnDisconnectEvent,
   handleOnPlayerConnectedEvent,
   handleOnPlayerDisconnectedEvent,
+  handleOnPlayerMessageSceneEvent,
   handleOnPongEvent,
   handleOnServerFullEvent,
   handleOnUpdateSceneEvent,
@@ -18,9 +19,8 @@ const useWebSocket = () => {
   const { socket, setPing, setConnectionStatus } = useConnectionStore(
     useShallow((state) => state)
   );
-  const { setScene, setPlayers, addPlayerEvent } = useSceneStore(
-    useShallow((state) => state)
-  );
+  const { setScene, setPlayers, addPlayerEvent, addPlayerMessage } =
+    useSceneStore(useShallow((state) => state));
   useConnectionStore;
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const useWebSocket = () => {
     handleOnUpdateSceneEvent(socket, setScene, setPlayers);
     handleOnPlayerConnectedEvent(socket, addPlayerEvent);
     handleOnPlayerDisconnectedEvent(socket, addPlayerEvent);
+    handleOnPlayerMessageSceneEvent(socket, addPlayerMessage);
 
     return () => {
       clientDisconnect(socket);
