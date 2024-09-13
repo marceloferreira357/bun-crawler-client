@@ -12,34 +12,41 @@ function Cursor() {
   const tile = getCursorTile(cursorVariant);
 
   return (
-    <SpriteSheet
-      src={
-        new URL(
-          "/ui/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Sprite sheet for Basic Pack.png",
-          import.meta.env.VITE_PUBLIC_ADDRESS
-        )
-      }
-      position={{
-        x,
-        y,
+    <div
+      style={{
+        position: "relative",
+        top: y,
+        left: x,
+        width: tile.width,
+        height: tile.height,
+        zIndex: zIndex.cursor,
+        pointerEvents: "none",
       }}
-      scale={2}
-      size={{
-        width: 896,
-        height: 240,
-      }}
-      tile={{
-        position: {
-          x: tile.x,
-          y: tile.y,
-        },
-        size: {
-          width: tile.width,
-          height: tile.height,
-        },
-      }}
-      zIndex={zIndex.cursor}
-    />
+    >
+      <SpriteSheet
+        src={
+          new URL(
+            "/ui/Sprout Lands - UI Pack - Basic pack/Sprite sheets/Sprite sheet for Basic Pack.png",
+            import.meta.env.VITE_PUBLIC_ADDRESS
+          )
+        }
+        scale={2}
+        size={{
+          width: 896,
+          height: 240,
+        }}
+        tile={{
+          position: {
+            x: tile.x,
+            y: tile.y,
+          },
+          size: {
+            width: tile.width,
+            height: tile.height,
+          },
+        }}
+      />
+    </div>
   );
 }
 

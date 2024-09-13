@@ -14,6 +14,7 @@ function Text({ position, children, fontSize, color = "#ffffff" }: TextProps) {
         style={{
           color,
           fontSize,
+          whiteSpace: "pre",
         }}
       >
         {children}

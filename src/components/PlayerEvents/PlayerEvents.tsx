@@ -70,7 +70,9 @@ function PlayerEvents() {
           <Text
             fontSize={"1.5rem"}
             color={
-              playerEvent.event === Events.PLAYER_CONNECTED ? "green" : "orange"
+              playerEvent.event === Events.PLAYER_CONNECTED
+                ? "#00CE9A"
+                : "#FFBB33"
             }
           >
             {playerEvent.event === Events.PLAYER_CONNECTED

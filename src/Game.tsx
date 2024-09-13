@@ -1,4 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
+import ChatCard from "./components/ChatCard";
 import ConnectionStatus from "./components/ConnectionStatus/ConnectionStatus";
 import ControllerHud from "./components/ControllerHud/ControllerHud";
 import Cursor from "./components/Cursor/Cursor";
@@ -27,6 +28,7 @@ function Game() {
       <DebugCard />
       <ControllerHud />
       <PlayerEvents />
+      <ChatCard />
       <Scene variant={scene} />
     </div>
   );

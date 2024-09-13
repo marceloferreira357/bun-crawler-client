@@ -5,6 +5,7 @@ export const zIndex = {
   debugCard: 9,
   controllerHud: 9,
   playerEvents: 9,
+  chatCard: 9,
 };
 
 export const credits = [

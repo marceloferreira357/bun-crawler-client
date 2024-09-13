@@ -49,7 +49,6 @@ const useSceneStore = create<{
         return state;
       }
       return {
-        ...state,
         playerEvents: [...state.playerEvents, playerEvent],
       };
     }),
@@ -61,7 +60,6 @@ const useSceneStore = create<{
         return state;
       }
       return {
-        ...state,
         playerMessages: [...state.playerMessages, playerMessage],
       };
     }),

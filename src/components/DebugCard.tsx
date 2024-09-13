@@ -42,7 +42,13 @@ function DebugCard() {
         fps:{" "}
         <Text
           fontSize={"1.5rem"}
-          color={fps >= 30 && fps < 60 ? "orange" : fps >= 60 ? "green" : "red"}
+          color={
+            fps >= 30 && fps < 60
+              ? "#FFBB33"
+              : fps >= 60
+                ? "#00CE9A"
+                : "#FF0071"
+          }
         >
           {fps}
         </Text>
@@ -54,7 +60,7 @@ function DebugCard() {
         connected:{" "}
         <Text
           fontSize={"1.5rem"}
-          color={connectionStatus === "connected" ? "green" : "red"}
+          color={connectionStatus === "connected" ? "#00CE9A" : "#FF0071"}
         >
           {connectionStatus === "connected" ? "true" : "false"}
         </Text>
@@ -67,10 +73,10 @@ function DebugCard() {
               fontSize={"1.5rem"}
               color={
                 ping > 150
-                  ? "red"
+                  ? "#FF0071"
                   : ping >= 50 && ping <= 150
-                    ? "orange"
-                    : "green"
+                    ? "#FFBB33"
+                    : "#00CE9A"
               }
             >
               {ping}
