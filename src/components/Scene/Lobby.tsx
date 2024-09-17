@@ -185,7 +185,7 @@ function Lobby() {
             variant={player.variant}
             isMoving={player.isMoving}
             name={player.id}
-            message={getLastPlayerMessage(playerMessages, socket)}
+            message={getLastPlayerMessage(playerMessages, player.id)}
           />
         ))}
       </Camera>
