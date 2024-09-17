@@ -25,7 +25,7 @@ import GameScene from "./GameScene";
 
 function Lobby() {
   const { socket } = useConnectionStore(useShallow((state) => state));
-  const { deltaTime } = useGameStore(useShallow((state) => state));
+  const { deltaTime, isTyping } = useGameStore(useShallow((state) => state));
   const { players } = useSceneStore(useShallow((state) => state));
 
   const windowSize = useWindowSize();
@@ -64,18 +64,22 @@ function Lobby() {
     ];
 
     // Update camera zoom based on key presses
-    if (pressedKeys.includes("=")) {
+    if (!isTyping && pressedKeys.includes("=")) {
       cameraZoom.current += 0.01;
     }
-    if (pressedKeys.includes("-")) {
+    if (!isTyping && pressedKeys.includes("-")) {
       cameraZoom.current -= 0.01;
     }
 
     // Update player target position based on key presses
-    const movingUp = pressedKeys.includes("w") || pressedKeys.includes("W");
-    const movingDown = pressedKeys.includes("s") || pressedKeys.includes("S");
-    const movingLeft = pressedKeys.includes("a") || pressedKeys.includes("A");
-    const movingRight = pressedKeys.includes("d") || pressedKeys.includes("D");
+    const movingUp =
+      !isTyping && (pressedKeys.includes("w") || pressedKeys.includes("W"));
+    const movingDown =
+      !isTyping && (pressedKeys.includes("s") || pressedKeys.includes("S"));
+    const movingLeft =
+      !isTyping && (pressedKeys.includes("a") || pressedKeys.includes("A"));
+    const movingRight =
+      !isTyping && (pressedKeys.includes("d") || pressedKeys.includes("D"));
 
     let isMoving = false;
     let newDirection: Direction | undefined;

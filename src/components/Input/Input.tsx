@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useKeyPress from "../../hooks/useKeyPress";
 import useGameStore from "../../stores/useGameStore";
 import Text from "../Text";
@@ -19,21 +20,18 @@ function Input({
   backgroundColor,
   fontSize,
 }: InputProps) {
-  const { deltaTime } = useGameStore((state) => state);
+  const { deltaTime, isTyping, setIsTyping } = useGameStore(
+    useShallow((state) => state)
+  );
 
   const valueRef = useRef<string>("");
-  const isTypingRef = useRef<boolean>(false);
   const pressedKeys = useKeyPress();
 
   const valueCursorAnimationAccumulator = useRef<number>(0);
   const showValueCursor = useRef<boolean>(true);
 
   const update = () => {
-    const newValue = insertKey(
-      isTypingRef.current,
-      valueRef.current,
-      pressedKeys
-    );
+    const newValue = insertKey(isTyping, valueRef.current, pressedKeys);
     if (newValue !== undefined) {
       valueRef.current = newValue;
     }
@@ -52,18 +50,18 @@ function Input({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.preventDefault();
-    isTypingRef.current = !isTypingRef.current;
+    setIsTyping(!isTyping);
   };
 
   const handleKeyUp = (event: KeyboardEvent) => {
     const handleKeyUpResult = handleOnEnterPress(
-      isTypingRef.current,
+      isTyping,
       valueRef.current,
       event,
       onChange
     );
     if (handleKeyUpResult) {
-      isTypingRef.current = handleKeyUpResult.isTyping;
+      setIsTyping(handleKeyUpResult.isTyping);
       valueRef.current = handleKeyUpResult.value;
     }
   };
@@ -71,7 +69,7 @@ function Input({
   useEffect(() => {
     window.addEventListener("keyup", handleKeyUp);
     return () => window.removeEventListener("keyup", handleKeyUp);
-  }, []);
+  }, [isTyping]);
 
   return (
     <div
@@ -86,13 +84,10 @@ function Input({
       }}
       onClick={handleOnClick}
     >
-      <Text
-        fontSize={fontSize}
-        color={isTypingRef.current ? "#ffffff" : "#AFA8BA"}
-      >
-        {isTypingRef.current ? valueRef.current : placeholder}
+      <Text fontSize={fontSize} color={isTyping ? "#ffffff" : "#AFA8BA"}>
+        {isTyping ? valueRef.current : placeholder}
       </Text>
-      {showValueCursor.current && isTypingRef.current && (
+      {showValueCursor.current && isTyping && (
         <div
           style={{
             display: "flex",
