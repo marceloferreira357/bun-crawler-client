@@ -30,12 +30,9 @@ function Input({
   const valueCursorAnimationAccumulator = useRef<number>(0);
   const showValueCursor = useRef<boolean>(true);
 
-  const update = () => {
-    const newValue = insertKey(isTyping, valueRef.current, pressedKeys);
-    if (newValue !== undefined) {
-      valueRef.current = newValue;
-    }
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const update = () => {
     const { accumulator, showCursor } = animateValueCursor(
       valueCursorAnimationAccumulator.current,
       showValueCursor.current,
@@ -50,7 +47,9 @@ function Input({
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.preventDefault();
-    setIsTyping(!isTyping);
+    if (!isTyping) {
+      setIsTyping(true);
+    }
   };
 
   const handleKeyUp = (event: KeyboardEvent) => {
@@ -71,16 +70,31 @@ function Input({
     return () => window.removeEventListener("keyup", handleKeyUp);
   }, [isTyping]);
 
+  useEffect(() => {
+    const newValue = insertKey(isTyping, valueRef.current, pressedKeys);
+    if (newValue !== undefined) {
+      valueRef.current = newValue;
+    }
+  }, [pressedKeys]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollLeft = containerRef.current.scrollWidth;
+    }
+  }, [valueRef.current]);
+
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         flexDirection: "row",
         backgroundColor,
         padding: "8px",
         borderRadius: "8px",
-        width: "100%",
+        width: "450px",
         height: "15.5px",
+        overflowX: "auto",
       }}
       onClick={handleOnClick}
     >

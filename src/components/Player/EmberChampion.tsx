@@ -11,6 +11,7 @@ function EmberChampion({
   zIndex,
   isMoving,
   name,
+  message,
 }: Omit<BasePlayer, "variant" | "tiles">) {
   const tiles: PlayerTiles = {
     female: [
@@ -47,6 +48,7 @@ function EmberChampion({
       zIndex={zIndex}
       isMoving={isMoving}
       name={name}
+      message={message}
     />
   );
 }

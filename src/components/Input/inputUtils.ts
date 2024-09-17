@@ -48,7 +48,13 @@ export const insertKey = (
     if (key === "Backspace") {
       return value.slice(0, -1);
     } else if (allowedKeys.has(key)) {
-      return value + key;
+      const newValue = `${value}${key}`;
+
+      if (newValue.length > 256) {
+        return;
+      }
+
+      return newValue;
     }
   }
 };

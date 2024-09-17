@@ -50,6 +50,7 @@ export type BaseCharacter = Omit<Entity, "size" | "scale"> & {
   tiles: Tile[];
   isMoving: boolean;
   name?: string;
+  message?: string;
 };
 
 export type PlayerVariant =

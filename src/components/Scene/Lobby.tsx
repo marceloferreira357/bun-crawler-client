@@ -22,11 +22,14 @@ import Camera from "../Camera/Camera";
 import Map from "../Map/Map";
 import Player from "../Player/Player";
 import GameScene from "./GameScene";
+import { getLastPlayerMessage } from "./sceneUtils";
 
 function Lobby() {
   const { socket } = useConnectionStore(useShallow((state) => state));
   const { deltaTime, isTyping } = useGameStore(useShallow((state) => state));
-  const { players } = useSceneStore(useShallow((state) => state));
+  const { players, playerMessages } = useSceneStore(
+    useShallow((state) => state)
+  );
 
   const windowSize = useWindowSize();
   const pressedKeys = useKeyPress();
@@ -182,6 +185,7 @@ function Lobby() {
             variant={player.variant}
             isMoving={player.isMoving}
             name={player.id}
+            message={getLastPlayerMessage(playerMessages, socket)}
           />
         ))}
       </Camera>

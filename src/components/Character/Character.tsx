@@ -3,7 +3,7 @@ import { useShallow } from "zustand/react/shallow";
 import { BaseCharacter } from "../../common/types";
 import useGameStore from "../../stores/useGameStore";
 import SpriteSheet from "../SpriteSheet";
-import NameBadge from "./NameBadge";
+import Badge from "./Badge";
 
 function Character({
   position,
@@ -13,6 +13,7 @@ function Character({
   tiles,
   isMoving,
   name,
+  message,
 }: BaseCharacter) {
   const { deltaTime } = useGameStore(useShallow((state) => state));
 
@@ -78,7 +79,8 @@ function Character({
         height: size.height * scale,
       }}
     >
-      {name && <NameBadge name={name} size={size} scale={scale} />}
+      {message && <Badge text={message} size={size} scale={scale} top={-64} />}
+      {name && <Badge text={name} size={size} scale={scale} top={-32} />}
       <div
         style={{
           width: tiles[tileIndex.current].width * scale,
